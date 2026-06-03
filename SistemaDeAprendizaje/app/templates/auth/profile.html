@@ -1,0 +1,95 @@
+{% extends 'base.html' %}
+
+{% block title %}Mi Perfil – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card card-glass border-0 shadow-lg p-4">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-gear text-accent fs-1"></i>
+                    <h2 class="text-white mt-2 mb-1">Configuración del Perfil</h2>
+                    <p class="text-secondary small">Administra tus nombres, correo de contacto y contraseña de acceso</p>
+                </div>
+                
+                <form action="{{ url_for('auth.profile') }}" method="POST" id="form-profile">
+                    <!-- Campo Nombre de Usuario -->
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-light-emphasis small fw-semibold">Nombre de Usuario:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" 
+                                   class="form-control bg-transparent text-white border-secondary" 
+                                   id="username" 
+                                   name="username" 
+                                   value="{{ g.usuario.username }}" 
+                                   required>
+                        </div>
+                        <div class="form-text text-muted small" style="font-size: 0.75rem;">Mínimo 3 caracteres. Identificará tus envíos en los reportes y dashboard.</div>
+                    </div>
+                    
+                    <!-- Campo Correo Electrónico -->
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-light-emphasis small fw-semibold">Correo Electrónico:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-envelope-fill"></i></span>
+                            <input type="email" 
+                                   class="form-control bg-transparent text-white border-secondary" 
+                                   id="email" 
+                                   name="email" 
+                                   value="{{ g.usuario.email }}" 
+                                   readonly
+                                   style="cursor: not-allowed; opacity: 0.65;"
+                                   required>
+                        </div>
+                        <div class="form-text text-muted small" style="font-size: 0.75rem;">
+                            <i class="bi bi-lock-fill text-accent"></i> El correo electrónico está vinculado a tu registro académico de la UTA y no puede ser modificado.
+                        </div>
+                    </div>
+
+                    <div class="p-3 bg-dark bg-opacity-25 rounded-3 border border-secondary border-opacity-10 mb-4 mt-4">
+                        <h6 class="text-white fw-bold mb-2 small"><i class="bi bi-key-fill text-accent me-1"></i> Cambiar Contraseña (Opcional)</h6>
+                        <p class="text-secondary small mb-3" style="font-size: 0.72rem;">Deja estos campos en blanco si no deseas cambiar tu contraseña actual.</p>
+                        
+                        <!-- Nueva Contraseña -->
+                        <div class="mb-3">
+                            <label for="password" class="form-label text-light-emphasis small fw-semibold">Nueva Contraseña:</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-lock-fill"></i></span>
+                                <input type="password" 
+                                       class="form-control bg-transparent text-white border-secondary" 
+                                       id="password" 
+                                       name="password" 
+                                       placeholder="Escribe la nueva contraseña">
+                            </div>
+                        </div>
+                        
+                        <!-- Confirmar Nueva Contraseña -->
+                        <div class="mb-0">
+                            <label for="confirm_password" class="form-label text-light-emphasis small fw-semibold">Confirmar Nueva Contraseña:</label>
+                            <div class="input-group">
+                                <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-shield-fill-check"></i></span>
+                                <input type="password" 
+                                       class="form-control bg-transparent text-white border-secondary" 
+                                       id="confirm_password" 
+                                       name="confirm_password" 
+                                       placeholder="Repite la nueva contraseña">
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex gap-3">
+                        <a href="{{ url_for('index') }}" class="btn btn-glass-secondary w-50 py-2.5 rounded-pill text-center">
+                            Cancelar
+                        </a>
+                        <button type="submit" class="btn btn-accent w-50 py-2.5 rounded-pill" id="btn-profile-submit">
+                            <i class="bi bi-save-fill me-1"></i> Guardar Cambios
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

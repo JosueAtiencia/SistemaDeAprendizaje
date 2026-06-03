@@ -1,0 +1,75 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ titulo }} – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('theory.learning_path') }}" class="text-accent text-decoration-none">Mapa de Ruta</a></li>
+            <li class="breadcrumb-item active text-secondary" aria-current="page">Unidad {{ unit_id }}</li>
+        </ol>
+    </nav>
+
+    <div class="row mt-4">
+        <!-- Panel Teórico Académico (Lado Izquierdo) -->
+        <div class="col-lg-8 mb-4">
+            <div class="card card-glass border-0 p-4 shadow">
+                <div class="d-flex align-items-center mb-4">
+                    <div class="icon-frame-cozy me-3">
+                        <i class="bi bi-journal-bookmark-fill text-accent fs-2"></i>
+                    </div>
+                    <div>
+                        <span class="text-secondary small fw-bold">LECCIÓN ACADÉMICA</span>
+                        <h2 class="text-white mb-0 fw-bold">{{ titulo }}</h2>
+                    </div>
+                </div>
+
+                <p class="text-secondary lead mb-4">{{ teoria.introduccion }}</p>
+
+                <!-- Secciones de Contenido -->
+                {% for sec in teoria.secciones %}
+                <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-10">
+                    <h4 class="text-white mb-2 fw-semibold">{{ sec.subtitulo }}</h4>
+                    <p class="text-secondary small mb-0" style="line-height: 1.6;">{{ sec.contenido }}</p>
+                </div>
+                {% endfor %}
+
+                <!-- Alerta Didáctica Relacionada -->
+                <div class="alert bg-accent bg-opacity-10 border border-accent border-opacity-25 text-white p-3 mb-0" style="border-radius: 12px;">
+                    <h6 class="fw-bold mb-1"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Consejo Práctico para C++:</h6>
+                    <p class="small text-secondary mb-0">La teoría cobra vida cuando interactúas con ella. Para entender la división por cero o el desbordamiento aritmético, abre cualquiera de los ejercicios de la derecha, ingresa valores atípicos y observa la respuesta del compilador de C++.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Ejercicios Asociados (Lado Derecho) -->
+        <div class="col-lg-4">
+            <div class="card card-glass border-0 p-4 shadow">
+                <h4 class="text-white mb-3 fw-bold"><i class="bi bi-puzzle-fill text-accent me-1"></i> Desafíos de Unidad {{ unit_id }}</h4>
+                <p class="text-secondary small mb-4">Resuelve estos desafíos prácticos e interactivos en C++ para afianzar tus conocimientos y ganar puntos.</p>
+
+                <div class="d-flex flex-column gap-3">
+                    {% for ej in ejercicios %}
+                    <div class="p-3 bg-dark bg-opacity-35 border border-secondary border-opacity-20 rounded-3 d-flex justify-content-between align-items-center hover-border-accent">
+                        <div>
+                            <h6 class="text-white mb-1 fw-bold">{{ ej.titulo }}</h6>
+                            <span class="text-muted small">C++ Binario Precompilado</span>
+                        </div>
+                        <a href="{{ url_for('interactive.view_interactive', ejercicio_id=ej.id) }}" class="btn btn-accent btn-sm rounded-pill px-3">
+                            Resolver <i class="bi bi-arrow-right-short ms-0.5"></i>
+                        </a>
+                    </div>
+                    {% endfor %}
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('theory.learning_path') }}" class="btn btn-glass-secondary w-100 rounded-pill py-2">
+                        <i class="bi bi-arrow-left-short me-1"></i> Volver al Mapa de Ruta
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

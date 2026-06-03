@@ -1,0 +1,1831 @@
+/* ==========================================================================
+   DISEÑO ACADÉMICO COZY - LOGICWEB UTA (Signature interface-design)
+   Cuaderno de Apuntes de Laboratorio, Pizarras de Tiza y Sellos de Aprobación
+   ========================================================================== */
+
+:root {
+    --bg-universe: #000000;
+    --chalkboard-bg: #0a0a0a;
+    --paper-bg: rgba(10, 10, 10, 0.7);
+    --grid-line: rgba(255, 255, 255, 0.02);
+    
+    /* Academic Monochromatic Tokens */
+    --academic-ink: #ffffff;
+    --academic-ink-light: #e5e5e5;
+    --mint-approved: #ffffff;
+    --lightbulb-amber: #a3a3a3;
+    --coral-correction: #737373;
+    --chalkboard-white: #ffffff;
+    
+    --border-chalk: rgba(255, 255, 255, 0.12);
+    --radius-cozy: 20px;
+    --spacing-base: 8px;
+    --gradient-body: radial-gradient(circle at 50% 0%, #171717 0%, var(--bg-universe) 100%);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.55);
+    
+    --navbar-bg: rgba(0, 0, 0, 0.85);
+    --nav-active-color: #ffffff;
+    --text-muted: #888888;
+    --accent-rgb: 255, 255, 255;
+}
+
+[data-theme="light"] {
+    --bg-universe: #ffffff;
+    --chalkboard-bg: #f5f5f5;
+    --paper-bg: rgba(255, 255, 255, 0.95);
+    --grid-line: rgba(0, 0, 0, 0.02);
+    
+    --chalkboard-white: #000000;
+    --border-chalk: rgba(0, 0, 0, 0.12);
+    
+    --gradient-body: radial-gradient(circle at 50% 0%, #ffffff 0%, var(--bg-universe) 100%);
+    --shadow-soft: 0 10px 30px rgba(0, 0, 0, 0.06);
+    
+    --navbar-bg: rgba(255, 255, 255, 0.9);
+    --nav-active-color: #000000;
+    --text-muted: #525252;
+    --accent-rgb: 0, 0, 0;
+    
+    /* Academic Monochromatic Tokens in Light Mode */
+    --academic-ink: #000000;
+    --academic-ink-light: #334155;
+    
+    /* Academic Grading Stamp Tokens in Light Mode */
+    --mint-approved: #15803d;
+    --lightbulb-amber: #b45309;
+    --coral-correction: #b91c1c;
+}
+
+/* ==========================================================================
+   SOBREESCRITURA GLOBAL DE CONTRASTE PARA MODO CLARO (EdTech Core)
+   Asegura que las clases rígidas "text-white" de Bootstrap se vuelvan oscuras
+   pero mantiene claro el pizarrón oscuro C++ de forma selectiva.
+   ========================================================================== */
+
+/* Declarar explícitamente el color de text-muted de forma dinámica según el tema */
+.text-muted,
+td span.text-muted {
+    color: var(--text-muted) !important; /* Usa variables CSS para transición perfecta */
+}
+
+[data-theme="light"] .text-white,
+[data-theme="light"] .text-white-50,
+[data-theme="light"] .text-light,
+[data-theme="light"] .text-light-emphasis,
+[data-theme="light"] .text-secondary-chalk,
+[data-theme="light"] h1, 
+[data-theme="light"] h2, 
+[data-theme="light"] h3, 
+[data-theme="light"] h4, 
+[data-theme="light"] h5, 
+[data-theme="light"] h6 {
+    color: #0f172a !important; /* Forzar tinta carbón oscuro */
+}
+
+[data-theme="light"] .text-secondary,
+[data-theme="light"] .text-white-50 {
+    color: #475569 !important; /* Gris de soporte legible */
+}
+
+[data-theme="light"] .navbar-brand {
+    color: #0f172a !important;
+}
+
+[data-theme="light"] .navbar-nav .nav-link:hover {
+    color: #000000 !important;
+    background: rgba(0, 0, 0, 0.05) !important;
+}
+
+[data-theme="light"] .navbar-toggler-icon,
+[data-theme="light"] .btn-close {
+    filter: invert(1); /* Volver oscuros los iconos del menú e interfaz Bootstrap */
+}
+
+/* Forzar contraste total para todos los textos de la tarjeta del Juez (evita letras blancas invisibles) */
+[data-theme="light"] .verdict-card,
+[data-theme="light"] .verdict-card h5,
+[data-theme="light"] .verdict-card h6,
+[data-theme="light"] .verdict-card p,
+[data-theme="light"] .verdict-card span,
+[data-theme="light"] .verdict-card li,
+[data-theme="light"] .verdict-card code,
+[data-theme="light"] .verdict-card button {
+    color: #000000 !important; /* Texto carbón oscuro en modo claro */
+}
+
+/* Fondos suaves y didácticos para la tarjeta del Juez en modo claro */
+[data-theme="light"] .verdict-card.verdict-ac {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.02) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+[data-theme="light"] .verdict-card.verdict-wa {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.04) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+[data-theme="light"] .verdict-card.verdict-re,
+[data-theme="light"] .verdict-card.verdict-tle {
+    background: linear-gradient(135deg, rgba(0, 0, 0, 0.05) 0%, rgba(255, 255, 255, 0.95) 100%) !important;
+}
+
+/* Campos suaves de pergamino dentro de la tarjeta de veredicto en modo claro */
+[data-theme="light"] .verdict-card .bg-dark.bg-opacity-20,
+[data-theme="light"] .verdict-card .bg-dark.bg-opacity-35 {
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Corregir el hover de los nodos del Skill Tree en modo claro */
+[data-theme="light"] .exercise-circle-node:hover {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+[data-theme="light"] .exercise-circle-node:hover i {
+    color: #ffffff !important;
+}
+
+/* Preservar textos claros exclusivamente dentro del pizarrón oscuro de C++ */
+[data-theme="light"] pre.code-block,
+[data-theme="light"] pre.code-block span,
+[data-theme="light"] pre.code-block code,
+[data-theme="light"] #cpp-line-explanation,
+[data-theme="light"] #cpp-line-explanation h6,
+[data-theme="light"] #cpp-line-explanation p,
+[data-theme="light"] #cpp-line-explanation i,
+[data-theme="light"] .verdict-card pre,
+[data-theme="light"] .verdict-card pre code {
+    color: #f1f5f9 !important; /* Preserva texto blanco/tiza sobre pizarrón */
+}
+
+/* Corregir las previsualizaciones de consola dentro de celdas de tabla en modo claro */
+[data-theme="light"] td pre,
+[data-theme="light"] td pre.bg-dark,
+[data-theme="light"] td pre code,
+[data-theme="light"] td pre.bg-dark code,
+[data-theme="light"] td pre span,
+[data-theme="light"] td pre.bg-dark span {
+    background-color: rgba(0, 0, 0, 0.05) !important; /* Caja gris claro de libro de texto */
+    color: #1e293b !important; /* Tinta carbón legible */
+    border: 1px solid rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Base Setup */
+body {
+    background: var(--gradient-body);
+    color: var(--chalkboard-white);
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: background 0.3s ease, color 0.3s ease;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    font-weight: 800;
+    letter-spacing: -0.01em;
+}
+
+/* Text Hierarchy */
+.text-primary-chalk { color: var(--chalkboard-white); }
+.text-secondary-chalk { color: #cbd5e1; }
+.text-muted-chalk { color: #64748b; }
+
+/* Brand Accent Text Utility Classes */
+.text-accent {
+    color: #ffffff !important; /* Blanco en Modo Oscuro */
+}
+.text-light-accent {
+    color: #cccccc !important; /* Gris claro en Modo Oscuro */
+}
+
+[data-theme="light"] .text-accent {
+    color: #000000 !important; /* Negro en Modo Claro */
+}
+[data-theme="light"] .text-light-accent {
+    color: #555555 !important; /* Gris oscuro en Modo Claro */
+}
+
+/* Custom scrollbar matching chalkboard */
+::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+::-webkit-scrollbar-track {
+    background: var(--bg-universe);
+}
+::-webkit-scrollbar-thumb {
+    background: #334155;
+    border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+    background: var(--academic-ink);
+}
+
+/* Navigation: Cozy Glass Navbar */
+.navbar-glass {
+    background: var(--navbar-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border-chalk);
+    padding: 0.8rem 0;
+    transition: background 0.3s ease, border-color 0.3s ease;
+}
+
+.brand-text {
+    font-size: 1.5rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%); /* Blanco a Gris plateado en Modo Oscuro */
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    color: #ffffff; /* Fallback */
+    transition: all 0.3s ease;
+}
+
+[data-theme="light"] .brand-text {
+    background: linear-gradient(135deg, #000000 0%, #737373 100%) !important; /* Negro a Gris carbón en Modo Claro */
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+    color: #000000 !important; /* Fallback */
+}
+
+.navbar-nav .nav-link {
+    color: var(--text-muted);
+    font-weight: 600;
+    font-size: 0.95rem;
+    padding: 0.4rem 1.2rem !important;
+    border-radius: 30px;
+    transition: all 0.2s ease;
+}
+
+.navbar-nav .nav-link:hover, .navbar-nav .nav-link.active {
+    color: var(--nav-active-color);
+    background: rgba(var(--accent-rgb), 0.1);
+}
+
+.user-badge {
+    background: rgba(var(--accent-rgb), 0.08);
+    border: 1px solid var(--border-chalk);
+    padding: 0.45rem 1.1rem;
+    border-radius: 30px;
+}
+
+/* ==========================================================================
+   LAB NOTEBOOK SURFACES (Cozy Grid Textures)
+   ========================================================================== */
+.card-glass {
+    background-color: var(--paper-bg);
+    background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 24px 24px; /* Textura de cuaderno cuadriculado de ingeniería */
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid var(--border-chalk);
+    border-radius: var(--radius-cozy);
+    padding: 2rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    animation: fadeInUp 0.45s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.card-glass:hover {
+    border-color: rgba(var(--accent-rgb), 0.25);
+    box-shadow: 0 12px 40px rgba(var(--accent-rgb), 0.08);
+}
+
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(12px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Buttons */
+.btn-accent {
+    background: #ffffff;
+    color: #000000;
+    font-weight: 700;
+    border: 1px solid #ffffff;
+    border-radius: 30px;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+    transition: all 0.25s ease;
+}
+
+.btn-accent:hover {
+    transform: translateY(-2px);
+    background: #e5e5e5;
+    border-color: #e5e5e5;
+    color: #000000;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25);
+}
+
+[data-theme="light"] .btn-accent {
+    background: #000000;
+    color: #ffffff;
+    border: 1px solid #000000;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .btn-accent:hover {
+    background: #1a1a1a;
+    border-color: #1a1a1a;
+    color: #ffffff;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.25);
+}
+
+.btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.03);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    font-weight: 600;
+    border-radius: 30px;
+    transition: all 0.2s ease;
+}
+
+.btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.08);
+    border-color: rgba(255, 255, 255, 0.35);
+    color: #ffffff;
+}
+
+[data-theme="light"] .btn-glass-secondary {
+    background: rgba(0, 0, 0, 0.03);
+    color: #000000;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+}
+
+[data-theme="light"] .btn-glass-secondary:hover {
+    background: rgba(0, 0, 0, 0.08);
+    border-color: rgba(0, 0, 0, 0.35);
+    color: #000000;
+}
+
+/* ==========================================================================
+   SKILL TREE COMPASS MAP (Exercism Cozy Redesign)
+   ========================================================================== */
+.learning-path-container {
+    position: relative;
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 3rem 1rem;
+}
+
+/* Dotted educational track */
+.path-line {
+    position: absolute;
+    left: 50%; top: 0; bottom: 0; width: 6px;
+    background: repeating-linear-gradient(
+        to bottom,
+        #475569,
+        #475569 8px,
+        transparent 8px,
+        transparent 18px
+    );
+    transform: translateX(-50%);
+    z-index: 1;
+}
+
+.unit-node {
+    position: relative;
+    z-index: 2;
+    margin-bottom: 6rem;
+    background: rgba(10, 10, 10, 0.7);
+    border: 1px solid var(--border-chalk);
+    background-image: 
+        linear-gradient(rgba(var(--accent-rgb), 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(var(--accent-rgb), 0.02) 1px, transparent 1px);
+    background-size: 20px 20px;
+    padding: 3rem 2rem;
+    border-radius: 32px;
+    box-shadow: 0 15px 45px rgba(0,0,0,0.3);
+}
+
+.unit-badge-header {
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.05) 0%, rgba(var(--accent-rgb), 0.15) 100%);
+    border: 1px solid var(--border-chalk);
+    color: #ffffff;
+    display: inline-flex;
+    align-items: center;
+    padding: 0.5rem 1.3rem;
+    border-radius: 50px;
+    font-size: 0.85rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    margin-bottom: 1rem;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.05);
+}
+
+.exercises-connector {
+    display: grid;
+    grid-template-columns: repeat(2, 180px); /* Dos columnas fijas para el diseño 2x2 */
+    justify-content: center;
+    gap: 3.5rem 2rem; /* Espaciado entre filas (vertical) y columnas (horizontal) */
+    margin-top: 3rem;
+    padding-bottom: 1rem;
+}
+
+/* Ocultar scrollbar ya no es necesario con el grid pero lo mantenemos por si acaso */
+.exercises-connector::-webkit-scrollbar {
+    display: none;
+}
+.exercises-connector {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.exercise-circle-node {
+    width: 110px;
+    height: 110px;
+    border-radius: 50%;
+    background: #000000;
+    border: 5px solid #262626;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+    text-decoration: none !important;
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.exercise-circle-node i {
+    font-size: 2.2rem;
+    color: #525252;
+    transition: all 0.25s ease;
+}
+
+.node-number {
+    font-size: 2.2rem;
+    font-weight: 800;
+    line-height: 1;
+    color: #525252;
+    transition: all 0.25s ease;
+}
+
+.node-status-icon {
+    display: inline-flex;
+    margin-top: 4px;
+}
+
+.node-status-icon i {
+    font-size: 1.1rem !important;
+    transition: all 0.25s ease;
+}
+
+.node-label {
+    display: block;
+    width: 100%;
+    text-align: center;
+    font-size: 0.82rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    line-height: 1.35;
+    margin-top: 1.2rem;
+    transition: all 0.25s ease;
+}
+
+.exercise-circle-node:hover + .node-label,
+.exercise-circle-node.active-node + .node-label,
+.exercise-circle-node.completed + .node-label {
+    color: #ffffff;
+}
+
+/* Diseño didáctico académico para el número de Reto y Título en el Skill Tree */
+.node-label span.d-block:first-child {
+    color: #cccccc !important; /* Tinta plateada para el número de reto */
+    font-size: 0.72rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    font-weight: 800;
+}
+
+[data-theme="light"] .node-label span.d-block:first-child {
+    color: #525252 !important; /* Gris oscuro en modo claro */
+}
+
+.node-label span.d-block:last-child {
+    color: #cbd5e1;
+}
+
+[data-theme="light"] .node-label span.d-block:last-child {
+    color: #000000 !important;
+}
+
+/* Circle Node States */
+.exercise-circle-node.completed {
+    border-color: #10b981;
+    background: rgba(16, 185, 129, 0.1);
+    box-shadow: 0 0 25px rgba(16, 185, 129, 0.3);
+}
+.exercise-circle-node.completed i {
+    color: #10b981;
+}
+.exercise-circle-node.completed .node-number {
+    color: #10b981;
+}
+
+[data-theme="light"] .exercise-circle-node.completed {
+    border-color: #059669;
+    background: rgba(5, 150, 105, 0.05);
+}
+[data-theme="light"] .exercise-circle-node.completed i {
+    color: #059669;
+}
+[data-theme="light"] .exercise-circle-node.completed .node-number {
+    color: #059669;
+}
+
+.exercise-circle-node.active-node {
+    border-color: #ffffff;
+    background: rgba(255, 255, 255, 0.1);
+    animation: activeGlowPulse 2s infinite;
+}
+.exercise-circle-node.active-node i {
+    color: #ffffff;
+}
+.exercise-circle-node.active-node .node-number {
+    color: #ffffff;
+}
+
+[data-theme="light"] .exercise-circle-node.active-node {
+    border-color: #000000;
+    background: rgba(0, 0, 0, 0.05);
+}
+[data-theme="light"] .exercise-circle-node.active-node i {
+    color: #000000;
+}
+[data-theme="light"] .exercise-circle-node.active-node .node-number {
+    color: #000000;
+}
+
+@keyframes activeGlowPulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0.5); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 255, 255, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 255, 255, 0); }
+}
+
+[data-theme="light"] {
+    @keyframes activeGlowPulse {
+        0% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0.3); }
+        70% { box-shadow: 0 0 0 15px rgba(0, 0, 0, 0); }
+        100% { box-shadow: 0 0 0 0 rgba(0, 0, 0, 0); }
+    }
+}
+
+.exercise-circle-node:hover {
+    transform: scale(1.15) translateY(-4px);
+    background: #ffffff;
+    border-color: #ffffff;
+}
+.exercise-circle-node:hover i {
+    color: #000000;
+}
+.exercise-circle-node:hover .node-number {
+    color: #000000;
+}
+.exercise-circle-node:hover .node-label {
+    color: #ffffff;
+}
+
+[data-theme="light"] .exercise-circle-node:hover {
+    background: #000000;
+    border-color: #000000;
+}
+[data-theme="light"] .exercise-circle-node:hover i {
+    color: #ffffff;
+}
+[data-theme="light"] .exercise-circle-node:hover .node-number {
+    color: #ffffff;
+}
+[data-theme="light"] .exercise-circle-node:hover .node-label {
+    color: #000000;
+}
+
+/* ==========================================================================
+   SIGNATURE ELEMENT: EXAM GRADING STAMPS (Sello del Docente)
+   ========================================================================== */
+.verdict-card {
+    border-radius: 20px;
+    padding: 2rem;
+    border: 1px solid var(--border-chalk) !important;
+    position: relative;
+    overflow: hidden;
+    background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 24px 24px;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.3);
+    animation: stampFall 0.35s cubic-bezier(0.18, 0.89, 0.32, 1.28) forwards;
+}
+
+@keyframes stampFall {
+    0% {
+        transform: scale(1.3) rotate(8deg);
+        opacity: 0;
+    }
+    100% {
+        transform: scale(1) rotate(0);
+        opacity: 1;
+    }
+}
+
+.stamp-mark {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    border: 4px double;
+    border-radius: 12px;
+    padding: 0.5rem 1.2rem;
+    font-family: 'Outfit', sans-serif;
+    font-weight: 900;
+    font-size: 1.6rem;
+    text-transform: uppercase;
+    transform: rotate(-10deg);
+    opacity: 0.85;
+    letter-spacing: 0.05em;
+    pointer-events: none;
+    animation: stampImpact 0.4s ease-out;
+}
+
+@keyframes stampImpact {
+    0% { transform: scale(3) rotate(-35deg); opacity: 0; }
+    80% { transform: scale(0.9) rotate(-7deg); opacity: 0.9; }
+    100% { transform: scale(1) rotate(-10deg); opacity: 0.85; }
+}
+
+.stamp-mark-ac {
+    border-color: var(--mint-approved);
+    color: var(--mint-approved);
+    box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.stamp-mark-wa {
+    border-color: var(--lightbulb-amber);
+    color: var(--lightbulb-amber);
+}
+
+.stamp-mark-re, .stamp-mark-tle {
+    border-color: var(--coral-correction);
+    color: var(--coral-correction);
+}
+
+/* Verdict classes */
+.verdict-card.verdict-ac { border-top: 8px solid var(--mint-approved) !important; }
+.verdict-card.verdict-wa { border-top: 8px solid var(--lightbulb-amber) !important; }
+.verdict-card.verdict-re, .verdict-card.verdict-tle { border-top: 8px solid var(--coral-correction) !important; }
+
+/* Interactive Classroom Tabs */
+.nav-tabs-classroom {
+    border-bottom: 2px solid #334155;
+    margin-bottom: 1.5rem;
+}
+.nav-tabs-classroom .nav-link {
+    background: transparent;
+    border: none;
+    color: var(--text-muted);
+    font-weight: 700;
+    padding: 0.6rem 1.2rem;
+    font-size: 0.9rem;
+    position: relative;
+    transition: all 0.2s ease;
+}
+.nav-tabs-classroom .nav-link:hover {
+    color: #ffffff;
+    background-color: rgba(255, 255, 255, 0.04) !important;
+    border: none !important;
+}
+.nav-tabs-classroom .nav-link.active {
+    color: var(--academic-ink-light) !important;
+    background-color: rgba(99, 102, 241, 0.12) !important; /* Fondo suave para la pestaña activa */
+    border: none !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+.nav-tabs-classroom .nav-link.active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px; left: 0; right: 0; height: 3px;
+    background: var(--academic-ink);
+    border-radius: 3px;
+}
+
+/* ==========================================================================
+   CHALKBOARD CODE VISUALIZER (Pizarrón)
+   ========================================================================== */
+pre.code-block {
+    background: #0d131f !important;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.3rem;
+    color: #f1f5f9;
+    font-family: 'Fira Code', 'Courier New', Courier, monospace;
+    font-size: 0.88rem;
+    box-shadow: inset 0 2px 8px rgba(0,0,0,0.4);
+    line-height: 1.5;
+}
+
+.code-line-commented {
+    padding: 0.4rem 0.6rem;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.code-line-commented:hover {
+    background: rgba(var(--accent-rgb), 0.15);
+    color: #ffffff;
+}
+
+/* Cozy Advice lightbulb alert */
+.classroom-advice-box {
+    background: rgba(245, 158, 11, 0.05);
+    border: 1px solid rgba(245, 158, 11, 0.18);
+    border-radius: 14px;
+    padding: 1.2rem;
+}
+
+/* Loading overlay overlay with heavy blur */
+.loading-overlay {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(7, 10, 19, 0.88);
+    z-index: 100;
+    display: none;
+    justify-content: center;
+    align-items: center;
+    border-radius: var(--radius-cozy);
+    backdrop-filter: blur(10px);
+}
+
+/* Gamified Folder Boxes */
+.stat-box {
+    text-align: center;
+    border-radius: 20px;
+    padding: 2.2rem 1.2rem;
+    background-color: var(--paper-bg);
+    background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 20px 20px;
+    border: 1px solid var(--border-chalk);
+}
+
+.stat-number {
+    font-size: 2.6rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #ffffff 0%, #94a3b8 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.badge-card {
+    text-align: center;
+    padding: 2rem 1.5rem;
+    border-radius: 20px;
+    background: rgba(10, 10, 10, 0.4);
+    border: 1px solid var(--border-chalk);
+    transition: all 0.25s ease;
+}
+.badge-card:hover {
+    transform: translateY(-4px);
+    border-color: var(--academic-ink);
+    box-shadow: 0 0 25px rgba(var(--accent-rgb), 0.15);
+}
+.badge-icon {
+    width: 65px; height: 65px; border-radius: 50%;
+    background: rgba(var(--accent-rgb), 0.05);
+    border: 2px solid rgba(var(--accent-rgb), 0.15);
+    display: inline-flex; justify-content: center; align-items: center;
+    font-size: 2rem; margin-bottom: 1rem;
+}
+
+/* ==========================================================================
+   REFINAMIENTOS DE DISEÑO DE INTERFAZ (interface-design guidelines)
+   Corrige la separación de contenedores, espaciados y inputs en modo claro.
+   ========================================================================== */
+
+/* Aumentar la separación de los contenedores globales de forma controlada sin inflar alertas ni cabeceras */
+main.py-4 .container {
+    padding-top: 1.2rem !important;
+    padding-bottom: 1.2rem !important;
+}
+
+/* Espaciado generoso entre columnas de Bootstrap */
+.row {
+    --bs-gutter-x: 2.5rem !important;
+    --bs-gutter-y: 2.5rem !important;
+}
+
+/* Margen inferior para separar tarjetas apiladas */
+.card-glass {
+    padding: 2.5rem !important;
+    margin-bottom: 2.5rem !important;
+    border-radius: 24px !important;
+}
+
+/* Separación didáctica en la ruta de aprendizaje */
+.unit-node {
+    margin-bottom: 9rem !important;
+    padding: 3.5rem !important;
+}
+
+/* Espaciado de textos y jerarquías */
+p.lead {
+    margin-bottom: 2rem !important;
+    line-height: 1.8 !important;
+}
+
+/* ==========================================================================
+   CORRECCIÓN COMPLETA DE INPUTS Y CONTROLES EN MODO CLARO
+   Previene el error de texto blanco sobre fondo blanco en formularios.
+   ========================================================================== */
+[data-theme="light"] input.form-control,
+[data-theme="light"] select.form-select,
+[data-theme="light"] textarea.form-control {
+    color: #000000 !important; /* Texto de escritura en carbón oscuro */
+    background-color: rgba(0, 0, 0, 0.03) !important; /* Fondo sutil grisáceo */
+    border: 2px solid rgba(var(--accent-rgb), 0.15) !important; /* Borde bien contrastado */
+    border-radius: 12px !important;
+    transition: all 0.2s ease;
+}
+
+[data-theme="light"] input.form-control::placeholder {
+    color: #64748b !important; /* Placeholder perfectamente visible */
+}
+
+[data-theme="light"] input.form-control:focus,
+[data-theme="light"] select.form-select:focus {
+    background-color: #ffffff !important;
+    border-color: var(--academic-ink) !important;
+    box-shadow: 0 0 0 4px rgba(var(--accent-rgb), 0.15) !important;
+}
+
+[data-theme="light"] .form-label {
+    color: #1e293b !important;
+    font-weight: 700 !important;
+}
+
+[data-theme="light"] .form-text {
+    color: #475569 !important;
+}
+
+/* ==========================================================================
+   CONVERSIÓN DE TABLAS MODO OSCURO A HOJAS DE CONTROL CLARAS
+   Previene tablas negras chocantes en la atmósfera de cuaderno de pergamino.
+   ========================================================================== */
+[data-theme="light"] .table-dark {
+    background: transparent !important;
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, 0.08) !important;
+}
+
+[data-theme="light"] .table-dark th {
+    background: rgba(var(--accent-rgb), 0.04) !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+    border-bottom: 2px solid rgba(var(--accent-rgb), 0.15) !important;
+    padding: 1rem !important;
+}
+
+[data-theme="light"] .table-dark td {
+    background: transparent !important;
+    color: #334155 !important;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.06) !important;
+    padding: 1rem !important;
+}
+
+.cursor-pointer {
+    cursor: pointer !important;
+}
+
+.collapse-chevron {
+    display: inline-block;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.accordion-toggle[aria-expanded="true"] .collapse-chevron {
+    transform: rotate(180deg);
+}
+
+/* Hover and selection styling for collapsible table rows */
+.table-dark.table-hover > tbody > tr.accordion-toggle:hover > * {
+    background-color: rgba(255, 255, 255, 0.05) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+}
+
+.table-dark.table-hover > tbody > tr.accordion-toggle[aria-expanded="true"] > * {
+    background-color: rgba(255, 255, 255, 0.03) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-bottom-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+[data-theme="light"] .table-dark.table-hover > tbody > tr.accordion-toggle:hover > * {
+    background-color: rgba(0, 0, 0, 0.04) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    color: #000000 !important;
+}
+
+[data-theme="light"] .table-dark.table-hover > tbody > tr.accordion-toggle[aria-expanded="true"] > * {
+    background-color: rgba(0, 0, 0, 0.02) !important;
+    background-image: none !important;
+    box-shadow: none !important;
+    border-bottom-color: rgba(0, 0, 0, 0.1) !important;
+    color: #000000 !important;
+}
+
+/* ==========================================================================
+   COMPLEMENTOS VISUALES EN MODO CLARO
+   ========================================================================== */
+[data-theme="light"] .btn-glass-secondary {
+    background: rgba(0, 0, 0, 0.05) !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+}
+
+[data-theme="light"] .btn-glass-secondary:hover {
+    background: rgba(0, 0, 0, 0.1) !important;
+    border-color: rgba(0, 0, 0, 0.18) !important;
+}
+
+[data-theme="light"] .badge-card {
+    background: rgba(255, 255, 255, 0.9) !important;
+    border-color: rgba(var(--accent-rgb), 0.12) !important;
+}
+
+[data-theme="light"] .stat-box {
+    background-color: #ffffff !important;
+    box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.06) !important;
+    border-color: rgba(var(--accent-rgb), 0.1) !important;
+}
+
+[data-theme="light"] .stat-number {
+    background: linear-gradient(135deg, #000000 0%, #333333 100%) !important;
+    -webkit-background-clip: text !important;
+    -webkit-text-fill-color: transparent !important;
+}
+
+[data-theme="light"] .badge-icon {
+    background: rgba(var(--accent-rgb), 0.06) !important;
+    border-color: rgba(var(--accent-rgb), 0.2) !important;
+}
+
+[data-theme="light"] .classroom-advice-box {
+    background: rgba(245, 158, 11, 0.04) !important;
+    border: 1px solid rgba(245, 158, 11, 0.25) !important;
+    color: #78350f !important;
+}
+
+[data-theme="light"] .nav-tabs-classroom {
+    border-bottom: 2px solid rgba(var(--accent-rgb), 0.15) !important;
+}
+[data-theme="light"] .nav-tabs-classroom .nav-link {
+    color: #475569 !important;
+}
+[data-theme="light"] .nav-tabs-classroom .nav-link:hover {
+    color: #0f172a !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border: none !important;
+}
+[data-theme="light"] .nav-tabs-classroom .nav-link.active {
+    color: var(--academic-ink) !important;
+    background-color: rgba(99, 102, 241, 0.06) !important; /* Fondo pergamino para la pestaña activa */
+    border: none !important;
+    border-radius: 8px 8px 0 0 !important;
+}
+
+/* ==========================================================================
+   ESTILOS DE BADGES DEL JUEZ ONLINE (Veredictos de la Tabla)
+   ========================================================================== */
+.badge-oj {
+    padding: 0.45rem 0.9rem !important;
+    font-size: 0.78rem !important;
+    font-weight: 800 !important;
+    border-radius: 30px !important;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    display: inline-block;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.08);
+    transition: all 0.2s ease;
+}
+
+/* Dark Mode Badges */
+.badge-oj-ac {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ffffff !important;
+}
+
+.badge-oj-wa {
+    background-color: transparent !important;
+    color: #e5e5e5 !important;
+    border: 1px dashed #e5e5e5 !important;
+}
+
+.badge-oj-re {
+    background-color: transparent !important;
+    color: #a3a3a3 !important;
+    border: 1px solid #525252 !important;
+}
+
+/* Light Mode Badges (High Contrast) */
+[data-theme="light"] .badge-oj-ac {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #000000 !important;
+}
+
+[data-theme="light"] .badge-oj-wa {
+    background-color: transparent !important;
+    color: #1a1a1a !important;
+    border: 1px dashed #1a1a1a !important;
+}
+
+[data-theme="light"] .badge-oj-re {
+    background-color: transparent !important;
+    color: #737373 !important;
+    border: 1px solid #d4d4d4 !important;
+}
+
+/* ==========================================================================
+   DISEÑO COZY DE LAS UNIDADES EN EL MAPA DE RUTA (Modo Claro & Espaciado)
+   ========================================================================== */
+
+/* Fondo de Cuaderno Claro para el nodo de cada unidad en la ruta */
+[data-theme="light"] .unit-node {
+    background-color: var(--paper-bg) !important;
+    border: 1px solid var(--border-chalk) !important;
+    background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px) !important;
+    box-shadow: 0 10px 30px rgba(var(--accent-rgb), 0.05) !important;
+}
+
+/* Badge de cabecera de la Unidad en modo claro (Alta legibilidad) */
+[data-theme="light"] .unit-badge-header {
+    background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.08) 0%, rgba(var(--accent-rgb), 0.04) 100%) !important;
+    border: 1px solid var(--academic-ink) !important;
+    color: var(--academic-ink) !important;
+    box-shadow: 0 4px 12px rgba(var(--accent-rgb), 0.04) !important;
+}
+
+/* Botón de Estudiar Teoría de la Unidad en modo claro */
+[data-theme="light"] .unit-node .btn-outline-light {
+    border-color: var(--academic-ink) !important;
+    color: var(--academic-ink) !important;
+    background: transparent !important;
+}
+[data-theme="light"] .unit-node .btn-outline-light:hover {
+    background: var(--academic-ink) !important;
+    color: #ffffff !important;
+}
+
+/* Espaciador del botón Guía Resuelta para evitar colisiones con la etiqueta del círculo */
+.learning-path-btn-wrapper {
+    margin-top: 4.2rem !important;
+    position: relative;
+    display: inline-block;
+}
+
+/* Complemento: Cajas de desafíos en teoría de unidad y alertas en modo claro */
+[data-theme="light"] .col-lg-4 .bg-dark.bg-opacity-35 {
+    background-color: rgba(var(--accent-rgb), 0.04) !important;
+    border: 1px solid rgba(var(--accent-rgb), 0.12) !important;
+}
+
+[data-theme="light"] .alert.bg-accent.bg-opacity-10 {
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border: 1px solid rgba(0, 0, 0, 0.1) !important;
+    color: #000000 !important;
+}
+
+/* ==========================================================================
+   ESTILIZACIÓN COMPLETA DE NODOS DEL ÁRBOL (SKILL TREE) EN MODO CLARO
+   ========================================================================== */
+
+/* Nodos Base (Bloqueados por defecto) */
+[data-theme="light"] .exercise-circle-node {
+    background-color: #ffffff !important;
+    border-color: #e5e5e5 !important;
+}
+[data-theme="light"] .exercise-circle-node i {
+    color: #a3a3a3 !important;
+}
+[data-theme="light"] .exercise-circle-node .node-number {
+    color: #a3a3a3 !important;
+}
+
+/* Nodo Activo */
+[data-theme="light"] .exercise-circle-node.active-node {
+    background-color: #ffffff !important;
+    border-color: #000000 !important;
+}
+[data-theme="light"] .exercise-circle-node.active-node i {
+    color: #000000 !important;
+}
+[data-theme="light"] .exercise-circle-node.active-node .node-number {
+    color: #000000 !important;
+}
+
+/* Nodo Completado */
+[data-theme="light"] .exercise-circle-node.completed {
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1) !important;
+}
+[data-theme="light"] .exercise-circle-node.completed i {
+    color: #ffffff !important;
+}
+[data-theme="light"] .exercise-circle-node.completed .node-number {
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   DISEÑO PREMIUM BLUEPRINT PARA ESPERA DE ENTRADA (JUEZ ONLINE)
+   ========================================================================== */
+.placeholder-icon-wrapper {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.04);
+    border: 2px dashed #ffffff;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+    animation: placeholderPulse 3s infinite ease-in-out;
+    transition: all 0.3s ease;
+}
+
+@keyframes placeholderPulse {
+    0% {
+        transform: scale(1);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+    }
+    50% {
+        transform: scale(1.05);
+        border-color: #ffffff;
+        box-shadow: 0 0 30px rgba(255, 255, 255, 0.15);
+    }
+    100% {
+        transform: scale(1);
+        border-color: rgba(255, 255, 255, 0.4);
+        box-shadow: 0 0 20px rgba(255, 255, 255, 0.02);
+    }
+}
+
+[data-theme="light"] .placeholder-icon-wrapper {
+    background: rgba(0, 0, 0, 0.03) !important;
+    border: 2px dashed #000000 !important;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.02) !important;
+}
+
+[data-theme="light"] {
+    @keyframes placeholderPulse {
+        0% {
+            transform: scale(1);
+            border-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.02);
+        }
+        50% {
+            transform: scale(1.05);
+            border-color: #000000;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.1);
+        }
+        100% {
+            transform: scale(1);
+            border-color: rgba(0, 0, 0, 0.4);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.02);
+        }
+    }
+}
+
+/* Monochromatic Accent Utilities */
+.bg-accent {
+    background-color: var(--academic-ink) !important;
+}
+.border-accent {
+    border-color: var(--academic-ink) !important;
+}
+.btn-outline-light {
+    border-color: rgba(var(--accent-rgb), 0.25) !important;
+    color: var(--academic-ink) !important;
+}
+.btn-outline-light:hover {
+    background-color: var(--academic-ink) !important;
+    color: var(--bg-universe) !important;
+    border-color: var(--academic-ink) !important;
+}
+
+
+
+
+/* Estilos para la Nueva Página Principal (LogicWeb UTA Reformada) */
+.btn-dark-puro {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #000000;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+[data-theme='light'] .btn-dark-puro:hover {
+    background-color: #333333 !important;
+}
+
+[data-theme='dark'] .btn-dark-puro {
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border-color: #ffffff;
+}
+
+.btn-light-glass {
+    background-color: rgba(0, 0, 0, 0.05) !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+[data-theme='dark'] .btn-light-glass {
+    background-color: rgba(255, 255, 255, 0.1) !important;
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.btn-light-glass:hover {
+    background-color: rgba(0, 0, 0, 0.1) !important;
+}
+
+.card-glass-clickable {
+    background: var(--paper-bg);
+    backdrop-filter: blur(10px);
+    border: 1px solid var(--border-chalk) !important;
+    border-radius: var(--radius-cozy);
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    cursor: pointer;
+}
+
+.card-glass-clickable:hover {
+    transform: translateY(-5px);
+    box-shadow: var(--shadow-soft);
+    border-color: rgba(var(--accent-rgb), 0.5) !important;
+}
+
+.bg-accent-soft {
+    background-color: rgba(var(--accent-rgb), 0.1);
+}
+
+.transition-all {
+    transition: all 0.3s ease;
+}
+
+/* Estilos para Mermaid (Diagramas) */
+.mermaid {
+    background: rgba(0, 0, 0, 0.2) !important;
+    border-radius: 12px;
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    width: 100%;
+}
+
+[data-theme='light'] .mermaid {
+    background: rgba(0, 0, 0, 0.03) !important;
+    filter: invert(0.9) hue-rotate(180deg); /* Truco para invertir colores de mermaid en modo claro sin configurar mucho */
+}
+
+/* Estilos Adicionales para Landing Page Dinámica */
+.stat-card {
+    background: rgba(var(--accent-rgb), 0.03);
+    border: 1px solid rgba(var(--accent-rgb), 0.1);
+    border-radius: 15px;
+    padding: 20px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+    transform: scale(1.05);
+}
+
+.text-gradient {
+    background: linear-gradient(135deg, #ffffff 0%, #a3a3a3 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+[data-theme='light'] .text-gradient {
+    background: linear-gradient(135deg, #000000 0%, #444444 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.feature-icon-small {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 10px;
+    background: rgba(var(--accent-rgb), 0.1);
+    color: var(--chalkboard-white);
+    margin-bottom: 15px;
+}
+
+/* Estilos para el efecto de escritura (Typing Effect) */
+.typing-container {
+    font-family: 'JetBrains Mono', 'Fira Code', monospace;
+    min-height: 1.5em;
+    display: inline-block;
+}
+
+.cursor {
+    display: inline-block;
+    width: 3px;
+    background-color: var(--accent-rgb);
+    margin-left: 2px;
+    animation: blink 1s infinite;
+    vertical-align: middle;
+}
+
+@keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+}
+
+.code-card-dynamic {
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(var(--accent-rgb), 0.2);
+    border-radius: 20px;
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+}
+
+[data-theme='light'] .code-card-dynamic {
+    background: rgba(255, 255, 255, 0.9);
+    border-color: rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+}
+
+/* ==========================================================================
+   CORRECCIÓN DE CONTRASTE Y VISIBILIDAD DE BOTONES EN MODO CLARO/OSCURO
+   ========================================================================== */
+
+/* .btn-accent */
+.btn-accent,
+.btn-accent *,
+.btn-accent.text-black,
+.btn-accent .text-black {
+    color: #000000 !important;
+}
+[data-theme="light"] .btn-accent,
+[data-theme="light"] .btn-accent *,
+[data-theme="light"] .btn-accent.text-black,
+[data-theme="light"] .btn-accent .text-black {
+    color: #ffffff !important;
+    background-color: #000000 !important;
+    border-color: #000000 !important;
+}
+
+/* .btn-dark-puro */
+.btn-dark-puro,
+.btn-dark-puro *,
+.btn-dark-puro.text-white,
+.btn-dark-puro .text-white {
+    color: #ffffff !important;
+}
+[data-theme="dark"] .btn-dark-puro,
+[data-theme="dark"] .btn-dark-puro *,
+[data-theme="dark"] .btn-dark-puro.text-white,
+[data-theme="dark"] .btn-dark-puro .text-white {
+    color: #000000 !important;
+}
+
+/* .btn-light-glass */
+.btn-light-glass,
+.btn-light-glass * {
+    color: #000000 !important;
+}
+[data-theme="dark"] .btn-light-glass,
+[data-theme="dark"] .btn-light-glass * {
+    color: #ffffff !important;
+}
+
+/* .btn-glass-secondary */
+.btn-glass-secondary,
+.btn-glass-secondary * {
+    color: #ffffff !important;
+}
+[data-theme="light"] .btn-glass-secondary,
+[data-theme="light"] .btn-glass-secondary * {
+    color: #000000 !important;
+}
+
+/* .btn-outline-light */
+[data-theme="light"] .btn-outline-light {
+    border-color: #0f172a !important;
+    color: #0f172a !important;
+}
+[data-theme="light"] .btn-outline-light:hover {
+    background-color: #0f172a !important;
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   SISTEMA DE NOTIFICACIONES FLOTANTES PREMIUM (GLASS TOASTS)
+   ========================================================================== */
+#toast-notification-container {
+    position: fixed;
+    top: 85px;
+    right: 24px;
+    z-index: 1080;
+    max-width: 380px;
+    width: 100%;
+    pointer-events: none;
+}
+.toast-item {
+    pointer-events: auto;
+}
+.glass-toast {
+    background-color: var(--paper-bg);
+    background-image: 
+        linear-gradient(var(--grid-line) 1px, transparent 1px),
+        linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+    background-size: 20px 20px;
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--border-chalk) !important;
+    border-radius: 16px;
+    position: relative;
+    overflow: hidden;
+    box-shadow: var(--shadow-soft);
+    transform: translateX(120%);
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.glass-toast.show {
+    transform: translateX(0);
+    opacity: 1;
+}
+.glass-toast.hide {
+    transform: translateX(120%);
+    opacity: 0;
+    height: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    margin-bottom: 0;
+    border: 0 !important;
+    overflow: hidden;
+}
+.toast-indicator {
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+}
+.toast-message {
+    color: var(--chalkboard-white) !important;
+}
+
+/* ==========================================================================
+   CORRECCIONES DE CONTRASTE EN MODO CLARO PARA TABS Y CAJAS CONCEPTUALES
+   ========================================================================== */
+
+/* Pestañas de Unidades y de Referencia (Pseudocódigo / C++) */
+[data-theme="light"] .nav-tabs-classroom .nav-link:hover {
+    color: #0f172a !important;
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border: none !important;
+}
+[data-theme="light"] .nav-tabs-classroom .nav-link.active {
+    color: var(--academic-ink) !important;
+    background-color: rgba(99, 102, 241, 0.06) !important;
+    border: none !important;
+}
+[data-theme="light"] .nav-tabs-classroom .nav-link.active::after {
+    background-color: var(--academic-ink) !important;
+}
+
+/* Cajas de Conceptos Clave y Sintaxis en Material de Estudio */
+[data-theme="light"] .card-glass .bg-dark,
+[data-theme="light"] .card-glass .bg-black,
+[data-theme="light"] .bg-dark.bg-opacity-10,
+[data-theme="light"] .bg-dark.bg-opacity-20,
+[data-theme="light"] .bg-dark.bg-opacity-25,
+[data-theme="light"] .bg-dark.bg-opacity-35,
+[data-theme="light"] .bg-black.bg-opacity-40 {
+    background-color: rgba(0, 0, 0, 0.035) !important;
+    border-color: rgba(0, 0, 0, 0.09) !important;
+}
+
+/* Conservar el fondo oscuro para el panel de explicación de línea C++ en modo claro */
+[data-theme="light"] #cpp-line-explanation {
+    background-color: #0d131f !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Alinear los prepends de los inputs en modo claro */
+[data-theme="light"] .input-group-text.bg-dark {
+    background-color: rgba(0, 0, 0, 0.03) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+    color: #000000 !important;
+}
+
+/* Barra de progreso en modo claro */
+[data-theme="light"] .progress {
+    background-color: rgba(0, 0, 0, 0.08) !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+}
+[data-theme="light"] .progress-bar.bg-accent {
+    background-color: #000000 !important;
+    box-shadow: none !important;
+}
+
+/* Badge de Unidad en Mapa de Ruta en modo claro */
+[data-theme="light"] .unit-badge-header {
+    color: #000000 !important;
+    border-color: rgba(0, 0, 0, 0.15) !important;
+}
+[data-theme="light"] .unit-badge-header * {
+    color: #000000 !important;
+}
+
+/* Forzar borde oscuro en botones secundarios con estilos en línea */
+[data-theme="light"] .btn-glass-secondary {
+    border-color: rgba(0, 0, 0, 0.18) !important;
+}
+
+/* Nodo Meta / Fin de Ruta */
+.finish-node-circle {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: #000000;
+    border: 4px solid #f59e0b;
+    color: #f59e0b;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 25px rgba(245, 158, 11, 0.4);
+    transition: all 0.3s ease;
+    z-index: 2;
+}
+.finish-node-label {
+    background-color: var(--paper-bg);
+    border: 1px solid var(--border-chalk);
+    box-shadow: var(--shadow-soft);
+    z-index: 2;
+}
+.finish-node-label span {
+    color: #f59e0b !important;
+}
+
+[data-theme="light"] .finish-node-circle {
+    background: #ffffff;
+    border-color: #d97706;
+    color: #d97706;
+    box-shadow: 0 0 20px rgba(217, 119, 6, 0.25);
+}
+[data-theme="light"] .finish-node-label {
+    background-color: #ffffff;
+    border-color: rgba(0, 0, 0, 0.15);
+}
+[data-theme="light"] .finish-node-label span {
+    color: #d97706 !important;
+}
+
+/* Conservar el fondo negro y texto claro (estilo terminal) de la consola C++ en modo claro */
+[data-theme="light"] .verdict-card pre,
+[data-theme="light"] #consola-pane pre {
+    background-color: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+[data-theme="light"] .verdict-card pre code,
+[data-theme="light"] #consola-pane pre code {
+    color: #22c55e !important;
+}
+
+/* Conservar la consola de los detalles de intento en modo claro como terminal */
+.attempt-details-pre {
+    background-color: #000000 !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+.attempt-details-pre code {
+    color: #22c55e !important;
+}
+
+[data-theme="light"] .attempt-details-pre {
+    background-color: #000000 !important;
+    border-color: rgba(255, 255, 255, 0.15) !important;
+}
+[data-theme="light"] .attempt-details-pre code {
+    color: #22c55e !important;
+}
+
+/* ==========================================================================
+   CONSOLIDACIÓN DE CONTRASTE Y COHERENCIA DE TEMA (Modo Claro & Oscuro)
+   Previene errores de textos claros invisibles sobre cajas oscuras o viceversa.
+   ========================================================================== */
+
+/* 1. Transformar contenedores oscuros transparentes en pergamino índigo en Modo Claro */
+[data-theme="light"] .bg-black.bg-opacity-35,
+[data-theme="light"] .bg-black.bg-opacity-40,
+[data-theme="light"] .bg-dark.bg-opacity-10,
+[data-theme="light"] .bg-dark.bg-opacity-20,
+[data-theme="light"] .bg-dark.bg-opacity-25,
+[data-theme="light"] .bg-dark.bg-opacity-35 {
+    background-color: rgba(99, 102, 241, 0.04) !important;
+    border-color: rgba(99, 102, 241, 0.12) !important;
+}
+
+/* 2. Forzar que el pizarrón de código C++ de solved.html preserve su texto tiza claro en Modo Claro */
+[data-theme="light"] .bg-black .code-line-commented,
+[data-theme="light"] .bg-black .code-line-commented code,
+[data-theme="light"] .bg-black .code-line-commented span,
+[data-theme="light"] .code-line-commented,
+[data-theme="light"] .code-line-commented code,
+[data-theme="light"] .code-line-commented span {
+    color: #f1f5f9 !important; /* Preserva texto blanco/tiza sobre pizarrón */
+}
+
+[data-theme="light"] .code-line-commented:hover,
+[data-theme="light"] .code-line-commented:hover code,
+[data-theme="light"] .code-line-commented:hover span {
+    color: #ffffff !important;
+}
+
+/* 3. Forzar fondo sólido oscuro en el panel explicativo de C++ en solved.html para contraste ideal */
+[data-theme="light"] #cpp-line-explanation {
+    background-color: #0d131f !important; /* Fondo negro de pizarra sólida */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+[data-theme="light"] #cpp-line-explanation h6,
+[data-theme="light"] #cpp-line-explanation p,
+[data-theme="light"] #cpp-line-explanation code,
+[data-theme="light"] #cpp-line-explanation i {
+    color: #f1f5f9 !important; /* Texto tiza claro legible */
+}
+
+/* 4. Deshabilitar el resaltado de hover para las filas de detalle expandido no-hover */
+.table-hover > tbody > tr.no-hover:hover > * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+[data-theme="light"] .table-dark.table-hover > tbody > tr.no-hover:hover > * {
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+/* ==========================================================================
+   DISEÑO PREMIUM COZY PARA MARCOS DE ICONOS EN ENCABEZADOS (Flicker Free)
+   ========================================================================== */
+.icon-frame-cozy {
+    width: 60px;
+    height: 60px;
+    border-radius: 14px !important;
+    background-color: rgba(129, 140, 248, 0.1) !important; /* Índigo translúcido en Modo Oscuro */
+    border: 1px solid rgba(129, 140, 248, 0.25) !important;
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+}
+
+[data-theme="light"] .icon-frame-cozy {
+    background-color: rgba(99, 102, 241, 0.06) !important; /* Índigo papel suave en Modo Claro */
+    border: 1px solid rgba(99, 102, 241, 0.2) !important;
+}
+
+/* ==========================================================================
+   PIZARRAS DE C++ INTERACTIVAS Y ANOTADOR ACADÉMICO (Fondo Ocupado Bloqueado)
+   ========================================================================== */
+
+/* Bloquear las líneas de cuadrícula y dar fondo sólido en ambos temas */
+#cpp-line-explanation {
+    background-color: #0d131f !important; /* Fondo negro de pizarra sólida */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+#cpp-line-explanation h6,
+#cpp-line-explanation p,
+#cpp-line-explanation code,
+#cpp-line-explanation i {
+    color: #f1f5f9 !important; /* Forzar legibilidad de textos claro tiza */
+}
+
+/* Forzar que la pizarra interactiva de C++ sea sólida y mantenga su contraste en ambos temas */
+.interactive-code-chalkboard {
+    background-color: #0d131f !important; /* Pizarra negra C++ sólida */
+    border: 1px solid rgba(255, 255, 255, 0.08) !important;
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.45) !important;
+}
+
+.interactive-code-chalkboard .code-line-commented,
+.interactive-code-chalkboard .code-line-commented code,
+.interactive-code-chalkboard .code-line-commented span {
+    color: #f1f5f9 !important; /* Texto tiza claro legible en ambos modos */
+}
+
+.interactive-code-chalkboard .code-line-commented:hover,
+.interactive-code-chalkboard .code-line-commented:hover code,
+.interactive-code-chalkboard .code-line-commented:hover span {
+    color: #ffffff !important;
+}
+
+.interactive-code-chalkboard .code-line-commented.code-line-active {
+    background-color: rgba(99, 102, 241, 0.25) !important; /* Indigo translúcido */
+    border-left: 4px solid #818cf8 !important; /* Borde índigo brillante */
+    transition: all 0.15s ease;
+}
+
+.interactive-code-chalkboard .code-line-commented.code-line-active code,
+.interactive-code-chalkboard .code-line-commented.code-line-active span {
+    color: #ffffff !important;
+}
+
+/* ==========================================================================
+   MODAL CONFIRMAR RESTAURAR OVERRIDES (Modo Claro/Oscuro High Contrast)
+   ========================================================================== */
+#modalConfirmarRestaurar.modal,
+#modalConfirmarRestaurar .modal-content,
+#modalConfirmarRestaurar h5,
+#modalConfirmarRestaurar .modal-body,
+#modalConfirmarRestaurar .modal-header,
+#modalConfirmarRestaurar .modal-footer {
+    color: #f1f5f9 !important;
+}
+
+#modalConfirmarRestaurar .modal-title {
+    color: #ffffff !important;
+}
+
+#modalConfirmarRestaurar .modal-body {
+    color: #94a3b8 !important;
+}
+
+#modalConfirmarRestaurar .btn-close {
+    filter: none !important;
+    opacity: 0.8;
+}
+
+#modalConfirmarRestaurar .btn-close:hover {
+    opacity: 1;
+}
+
+#modalConfirmarRestaurar .btn-glass-secondary {
+    background: rgba(255, 255, 255, 0.03) !important;
+    color: #ffffff !important;
+    border: 1px solid rgba(255, 255, 255, 0.15) !important;
+}
+
+#modalConfirmarRestaurar .btn-glass-secondary:hover {
+    background: rgba(255, 255, 255, 0.08) !important;
+    border-color: rgba(255, 255, 255, 0.35) !important;
+    color: #ffffff !important;
+}
+
+#modalConfirmarRestaurar .btn-accent {
+    background: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid #ffffff !important;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15) !important;
+}
+
+#modalConfirmarRestaurar .btn-accent:hover {
+    background: #e5e5e5 !important;
+    color: #000000 !important;
+    box-shadow: 0 6px 20px rgba(255, 255, 255, 0.25) !important;
+}
+
+/* ==========================================================================
+   EDITOR DE CÓDIGO INTERACTIVO C++ (High Contrast Claro / Oscuro)
+   ========================================================================== */
+#editor-codigo {
+    color: #a5d6ff !important; /* Azul claro legible en Modo Oscuro */
+    background-color: #0d131f !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+[data-theme="light"] #editor-codigo {
+    color: #0f172a !important; /* Carbón oscuro legible en Modo Claro */
+    background-color: #f8fafc !important; /* Fondo gris tiza claro */
+    border-color: rgba(0, 0, 0, 0.15) !important;
+}
+
+
+
+
+
+
+
+

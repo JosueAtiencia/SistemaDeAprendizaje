@@ -1,0 +1,327 @@
+{% extends 'base.html' %}
+
+{% block title %}Inicio – LogicWeb UTA – Soluciones Reales{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <!-- Hero Section Minimalista (Imagen de Referencia) -->
+    <div class="text-center py-5 mb-5">
+        {% if g.usuario %}
+        <!-- Welcome Panel for Logged In User -->
+        <div class="mb-4 animate-pulse">
+            <i class="bi bi-person-workspace text-accent display-3"></i>
+        </div>
+        <h1 class="display-4 fw-bold text-white mb-2" style="font-family: 'Outfit', sans-serif;">
+            ¡Hola de nuevo, <span class="text-accent">{{ g.usuario.username }}</span>!
+        </h1>
+        <p class="lead text-secondary mx-auto mb-4" style="max-width: 700px; font-size: 1.15rem;">
+            Tu ruta hacia el dominio de la lógica y los algoritmos estructurados en C++ continúa. Sigue la guía de
+            aprendizaje recomendada para avanzar:
+        </p>
+
+        <!-- Panel Guía de Inicio Estructurado "Cómo Empezar" -->
+        <div class="row g-4 justify-content-center text-start mt-2 mb-4">
+            <!-- Paso 1 -->
+            <div class="col-md-4">
+                <div class="card card-glass border-0 p-3 h-100 bg-opacity-40"
+                    style="margin-bottom:0 !important; padding:1.5rem !important;">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-1-circle-fill text-accent me-2"></i>1. Estudia
+                        la Materia</h6>
+                    <p class="text-secondary small mb-3">Revisa las explicaciones de lógica, pseudocódigo y los códigos
+                        de referencia de cada unidad.</p>
+                    <a href="{{ url_for('theory.study_material') }}"
+                        class="btn btn-glass-secondary btn-sm rounded-pill w-100">
+                        <i class="bi bi-book-half me-1"></i> Ir a Material
+                    </a>
+                </div>
+            </div>
+            <!-- Paso 2 -->
+            <div class="col-md-4">
+                <div class="card card-glass border-0 p-3 h-100 bg-opacity-40"
+                    style="margin-bottom:0 !important; padding:1.5rem !important;">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-2-circle-fill text-accent me-2"></i>2. Resuelve
+                        los Retos</h6>
+                    <p class="text-secondary small mb-3">Pon a prueba tu lógica interactuando y enviando soluciones de
+                        código en el Juez Online C++.</p>
+                    <a href="{{ url_for('theory.learning_path') }}"
+                        class="btn btn-accent btn-sm rounded-pill w-100 text-black fw-bold">
+                        <i class="bi bi-map-fill me-1"></i> Ir al Mapa de Ruta
+                    </a>
+                </div>
+            </div>
+            <!-- Paso 3 -->
+            <div class="col-md-4">
+                <div class="card card-glass border-0 p-3 h-100 bg-opacity-40"
+                    style="margin-bottom:0 !important; padding:1.5rem !important;">
+                    <h6 class="text-white fw-bold mb-2"><i class="bi bi-3-circle-fill text-accent me-2"></i>3. Monitorea
+                        tu Avance</h6>
+                    <p class="text-secondary small mb-3">Sigue tus estadísticas, tasa de acierto en envíos y reclama tus
+                        insignias académicas logradas.</p>
+                    <a href="{{ url_for('reports.dashboard') }}"
+                        class="btn btn-glass-secondary btn-sm rounded-pill w-100">
+                        <i class="bi bi-bar-chart-fill me-1"></i> Ver Reportes
+                    </a>
+                </div>
+            </div>
+        </div>
+        {% else %}
+        <!-- Original Hero for Visitors -->
+        <div class="mb-4">
+            <i class="bi bi-cpu-fill text-white display-3"></i>
+        </div>
+        <h1 class="display-3 fw-bold text-white mb-3" style="font-family: 'Outfit', sans-serif;">LogicWeb <span
+                class="text-accent">UTA</span></h1>
+        <p class="lead text-secondary mx-auto mb-5" style="max-width: 800px; font-size: 1.25rem;">
+            Plataforma educativa interactiva y gamificada para el aprendizaje de lógica de programación y algoritmos
+            estructurados en C++. Desarrolla soluciones reales inspiradas en la industria.
+        </p>
+
+        <div class="d-flex justify-content-center gap-4 mt-4">
+            <a href="{{ url_for('auth.register') }}"
+                class="btn btn-dark-puro text-white px-5 py-3 rounded-pill fs-5 d-flex align-items-center">
+                <i class="bi bi-rocket-takeoff-fill me-2"></i> Comenzar Ahora
+            </a>
+            <a href="{{ url_for('auth.login') }}"
+                class="btn btn-dark-puro px-5 py-3 rounded-pill fs-5 d-flex align-items-center">
+                <i class="bi bi-box-arrow-in-right me-2"></i> Iniciar Sesión
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Sección de Impacto Académico (NUEVO) -->
+    <div class="row g-4 mb-5 pb-5">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3 class="fw-bold text-white mb-0">100%</h3>
+                <p class="text-secondary small mb-0">Arquitectura Limpia</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3 class="fw-bold text-white mb-0">C++20</h3>
+                <p class="text-secondary small mb-0">Ejecución Nativa</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3 class="fw-bold text-white mb-0">+50</h3>
+                <p class="text-secondary small mb-0">Casos del Mundo Real</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h3 class="fw-bold text-white mb-0">UTA</h3>
+                <p class="text-secondary small mb-0">Orgullo Académico</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Módulos del Sistema -->
+    <div class="mt-5 pt-5 border-top border-secondary border-opacity-10">
+        <div class="text-center mb-5">
+            <span
+                class="badge bg-accent-soft text-accent p-2 px-3 rounded-pill mb-2 text-uppercase tracking-wider">Explora
+                el Sistema</span>
+            <h2 class="text-white fw-bold display-6 mt-2">Módulos de Aprendizaje</h2>
+            <p class="text-secondary mx-auto" style="max-width: 600px;">
+                Selecciona un módulo para acceder a las diferentes herramientas de la plataforma.
+            </p>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            <!-- Módulo 1: Contenidos Teóricos -->
+            <div class="col-md-4">
+                <a href="{{ url_for('theory.study_material') if g.usuario else url_for('auth.login') }}"
+                    class="text-decoration-none h-100">
+                    <div class="card card-glass-clickable border-0 h-100 p-4 transition-all">
+                        <div class="icon-box mb-3">
+                            <i class="bi bi-journal-code text-accent fs-2"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Contenidos Teóricos</h4>
+                        <p class="text-secondary small mb-0">
+                            Explicaciones didácticas y resumidas sobre lógica de programación, diagramas de flujo y
+                            sintaxis de C++.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Módulo 2: Ejercicios Resueltos -->
+            <div class="col-md-4">
+                <a href="{{ url_for('theory.study_material') if g.usuario else url_for('auth.login') }}"
+                    class="text-decoration-none h-100">
+                    <div class="card card-glass-clickable border-0 h-100 p-4 transition-all">
+                        <div class="icon-box mb-3">
+                            <i class="bi bi-file-earmark-check text-accent fs-2"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Ejercicios Resueltos</h4>
+                        <p class="text-secondary small mb-0">
+                            Guías detalladas con análisis lógico, flujogramas y código fuente anotado de problemas
+                            reales.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Módulo 3: Workspace Interactivo (Juez Online) -->
+            <div class="col-md-4">
+                <a href="{{ url_for('theory.learning_path') if g.usuario else url_for('auth.login') }}"
+                    class="text-decoration-none h-100">
+                    <div class="card card-glass-clickable border-0 h-100 p-4 transition-all">
+                        <div class="icon-box mb-3">
+                            <i class="bi bi-terminal-fill text-accent fs-2"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Workspace Interactivo</h4>
+                        <p class="text-secondary small mb-0">
+                            Ejecuta código C++ de forma nativa en el servidor con retroalimentación inmediata del Juez
+                            Online.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Módulo 4: Dashboard y Estadísticas -->
+            <div class="col-md-4">
+                <a href="{{ url_for('reports.dashboard') if g.usuario else url_for('auth.login') }}"
+                    class="text-decoration-none h-100">
+                    <div class="card card-glass-clickable border-0 h-100 p-4 transition-all">
+                        <div class="icon-box mb-3">
+                            <i class="bi bi-pie-chart-fill text-accent fs-2"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Reportes y Logros</h4>
+                        <p class="text-secondary small mb-0">
+                            Visualiza tu rendimiento académico mediante gráficas de radar y seguimiento de insignias
+                            ganadas.
+                        </p>
+                    </div>
+                </a>
+            </div>
+
+            <!-- Módulo 5: Gestión de Usuarios -->
+            <div class="col-md-4">
+                <a href="{{ url_for('auth.login') if not g.usuario else url_for('auth.profile') }}"
+                    class="text-decoration-none h-100">
+                    <div class="card card-glass-clickable border-0 h-100 p-4 transition-all">
+                        <div class="icon-box mb-3">
+                            <i class="bi bi-shield-lock-fill text-accent fs-2"></i>
+                        </div>
+                        <h4 class="text-white fw-bold mb-2">Gestión de Accesos</h4>
+                        <p class="text-secondary small mb-0">
+                            Control de seguridad y perfiles de usuario para proteger tu avance y datos académicos.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Sección de Por Qué Elegir LogicWeb (NUEVO) -->
+    <div class="row mt-5 pt-5 align-items-center">
+        <div class="col-lg-6">
+            <h2 class="text-white fw-bold mb-4">¿Por qué aprender con <span class="text-accent">LogicWeb</span>?</h2>
+            <div class="d-flex mb-4">
+                <div class="feature-icon-small me-3">
+                    <i class="bi bi-cpu"></i>
+                </div>
+                <div>
+                    <h5 class="text-white mb-1">Sin Simulaciones, Código Real</h5>
+                    <p class="text-secondary small">Tus algoritmos se compilan y ejecutan en un entorno Linux real
+                        usando GCC, garantizando precisión técnica.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="feature-icon-small me-3">
+                    <i class="bi bi-trophy"></i>
+                </div>
+                <div>
+                    <h5 class="text-white mb-1">Gamificación con Propósito</h5>
+                    <p class="text-secondary small">Gana insignias y mejora tu ranking mientras resuelves problemas que
+                        un ingeniero enfrenta en la industria.</p>
+                </div>
+            </div>
+            <div class="d-flex mb-4">
+                <div class="feature-icon-small me-3">
+                    <i class="bi bi-shield-check"></i>
+                </div>
+                <div>
+                    <h5 class="text-white mb-1">Arquitectura de Software</h5>
+                    <p class="text-secondary small">Aprende no solo a programar, sino a entender cómo se construyen
+                        sistemas robustos y escalables.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 text-center">
+            <div class="code-card-dynamic text-start shadow-lg">
+                <div class="d-flex mb-3 opacity-50">
+                    <div class="rounded-circle bg-danger me-1" style="width: 10px; height: 10px;"></div>
+                    <div class="rounded-circle bg-warning me-1" style="width: 10px; height: 10px;"></div>
+                    <div class="rounded-circle bg-success" style="width: 10px; height: 10px;"></div>
+                </div>
+                <div id="typing-code" class="typing-container">
+                    <!-- Aquí se inyectará el código animado -->
+                </div><span class="cursor">|</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Banner Final CTA -->
+    <div class="card card-glass text-center p-5 my-5 border-0 shadow-lg"
+        style="background: linear-gradient(135deg, rgba(var(--accent-rgb), 0.1) 0%, rgba(0,0,0,0) 100%);">
+        <h2 class="text-white fw-bold mb-3">¿Listo para dominar C++?</h2>
+        <p class="text-secondary mb-4">Únete a la comunidad de estudiantes de la UTA y transforma tu lógica.</p>
+        <div class="d-flex justify-content-center gap-3">
+            <a href="{{ url_for('auth.register') if not g.usuario else url_for('theory.learning_path') }}"
+                class="btn btn-accent rounded-pill px-5 py-2">
+                ¡Empezar ahora!
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        const codeElement = document.getElementById("typing-code");
+        const codeLines = [
+            '<span class="text-secondary">#include</span> <span class="text-success">&lt;iostream&gt;</span>',
+            '<span class="text-info">int</span> <span class="text-warning">main</span>() {',
+            '    <span class="text-white">Logic l;</span>',
+            '    <span class="text-info">while</span> (l.passion) {',
+            '        <span class="text-accent">l.improve();</span>',
+            '        <span class="text-white">std::cout &lt;&lt; <span class="text-success">"Skill Up!"</span> &lt;&lt; std::endl;</span>',
+            '    }',
+            '    <span class="text-info">return</span> <span class="text-danger">0</span>;',
+            '}'
+        ];
+
+        let currentChar = 0;
+        let isDeleting = false;
+        let delay = 30;
+        const fullText = codeLines.join('\n');
+
+        function typeEffect() {
+            const currentDisplay = fullText.substring(0, currentChar);
+            codeElement.innerHTML = '<pre class="m-0" style="color: #abb2bf; font-size: 0.85rem; line-height: 1.4;">' + currentDisplay + '</pre>';
+
+            if (!isDeleting && currentChar < fullText.length) {
+                // Simular ráfagas de escritura rápida (como un pro)
+                const nextChars = Math.floor(Math.random() * 3) + 1;
+                currentChar = Math.min(currentChar + nextChars, fullText.length);
+                delay = Math.random() * 40 + 20;
+            } else if (isDeleting && currentChar > 0) {
+                currentChar = Math.max(currentChar - 5, 0); // Borrado más rápido
+                delay = 15;
+            } else {
+                isDeleting = !isDeleting;
+                delay = isDeleting ? 3000 : 800;
+            }
+
+            setTimeout(typeEffect, delay);
+        }
+
+        typeEffect();
+    });
+</script>
+{% endblock %}

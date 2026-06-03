@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+{% block title %}Iniciar Sesión – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card card-glass border-0 shadow-lg p-4 animate-pulse">
+                <div class="text-center mb-4">
+                    <i class="bi bi-shield-lock-fill text-accent fs-1"></i>
+                    <h2 class="text-white mt-2 mb-1">¡Hola de nuevo!</h2>
+                    <p class="text-secondary small">Ingresa tus credenciales para acceder a tu ruta de aprendizaje C++</p>
+                </div>
+                
+                <form action="{{ url_for('auth.login') }}" method="POST" id="form-login">
+                    <div class="mb-3">
+                        <label for="username_o_email" class="form-label text-light-emphasis small fw-semibold">Nombre de usuario o Correo:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person-fill"></i></span>
+                            <input type="text" class="form-control bg-transparent text-white border-secondary" id="username_o_email" name="username_o_email" placeholder="usuario o ejemplo@correo.com" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="d-flex justify-content-between">
+                            <label for="password" class="form-label text-light-emphasis small fw-semibold">Contraseña:</label>
+                        </div>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-key-fill"></i></span>
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="password" name="password" placeholder="••••••••" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent w-100 py-2.5 rounded-pill mb-3" id="btn-login-submit">
+                        <i class="bi bi-box-arrow-in-right me-1"></i> Iniciar Sesión
+                    </button>
+                </form>
+                
+                <div class="text-center mt-3 border-top border-secondary border-opacity-20 pt-3">
+                    <p class="text-secondary small mb-0">¿No tienes una cuenta aún? <a href="{{ url_for('auth.register') }}" class="text-accent fw-bold text-decoration-none">Registrate aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

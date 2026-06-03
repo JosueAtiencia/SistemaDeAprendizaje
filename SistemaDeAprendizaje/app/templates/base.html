@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <script>
+        // Evitar el destello (flicker) del tema oscuro al cargar la página en modo claro
+        (function() {
+            const temaGuardado = localStorage.getItem("theme") || "dark";
+            if (temaGuardado === "light") {
+                document.documentElement.setAttribute("data-theme", "light");
+            } else {
+                document.documentElement.removeAttribute("data-theme");
+            }
+        })();
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="LogicWeb UTA - Plataforma web educativa y gamificada para el aprendizaje de lógica de programación y algoritmos en C++ con Juez Online integrado.">
+    <title>{% block title %}LogicWeb UTA – Soluciones Reales{% endblock %}</title>
+    <!-- Google Fonts: Outfit & Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <!-- Custom CSS para Estética Premium -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/custom.css') }}">
+    {% block head %}{% endblock %}
+</head>
+<body>
+
+    <!-- Navbar Premium Glassmorphic -->
+    <nav class="navbar navbar-expand-lg sticky-top navbar-glass">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center" href="{{ url_for('index') }}" id="nav-brand-logo">
+                <i class="bi bi-cpu-fill text-accent me-2 fs-3 animate-pulse"></i>
+                <span class="brand-text">LogicWeb <span class="text-accent">UTA</span></span>
+            </a>
+            
+            {% if g.usuario %}
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarContent" aria-controls="navbarContent" aria-expanded="false" aria-label="Toggle navigation" id="nav-toggle-btn">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'theory.study_material' %}active{% endif %}" href="{{ url_for('theory.study_material') }}" id="nav-study-material">
+                            <i class="bi bi-book-half me-1"></i> Material de Estudio
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'theory.learning_path' %}active{% endif %}" href="{{ url_for('theory.learning_path') }}" id="nav-learning-path">
+                            <i class="bi bi-map-fill me-1"></i> Mapa de Ruta
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link {% if request.endpoint == 'reports.dashboard' %}active{% endif %}" href="{{ url_for('reports.dashboard') }}" id="nav-dashboard">
+                            <i class="bi bi-bar-chart-fill me-1"></i> Reportes
+                        </a>
+                    </li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <button id="theme-toggle-btn" class="btn btn-glass-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="Cambiar Tema (Claro/Oscuro)">
+                        <i id="theme-toggle-icon" class="bi bi-sun-fill text-warning"></i>
+                    </button>
+                    <a href="{{ url_for('auth.profile') }}" class="user-badge px-3 py-1.5 rounded-pill d-flex align-items-center text-decoration-none hover-border-accent" title="Configuración de Perfil" id="nav-user-profile-link">
+                        <i class="bi bi-person-circle text-accent me-2"></i>
+                        <span class="fw-semibold small" id="nav-username">{{ g.usuario.username }}</span>
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="btn btn-outline-danger btn-sm rounded-pill px-3" id="nav-logout-btn">
+                        <i class="bi bi-box-arrow-right"></i> Salir
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div class="d-flex ms-auto align-items-center gap-2">
+                <button id="theme-toggle-btn" class="btn btn-glass-secondary rounded-circle p-0 d-flex align-items-center justify-content-center" style="width: 38px; height: 38px;" title="Cambiar Tema (Claro/Oscuro)">
+                    <i id="theme-toggle-icon" class="bi bi-sun-fill text-warning"></i>
+                </button>
+                <a href="{{ url_for('auth.login') }}" class="btn btn-glass-secondary rounded-pill px-4" id="nav-login-link">Iniciar Sesión</a>
+                <a href="{{ url_for('auth.register') }}" class="btn btn-accent rounded-pill px-4" id="nav-register-link">Registrarse</a>
+            </div>
+            {% endif %}
+        </div>
+    </nav>
+
+    <!-- Contenedor de Notificaciones Flotantes (Toasts) -->
+    <div id="toast-notification-container" role="presentation">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="toast-item glass-toast border-0 shadow mb-3" role="alert" id="flash-alert-{{ loop.index }}">
+                        <div class="toast-indicator bg-{{ 'success' if category == 'success' else 'danger' if category == 'danger' else 'warning' if category == 'warning' else 'info' }}"></div>
+                        <div class="d-flex align-items-center p-3">
+                            <div class="toast-icon me-3">
+                                {% if category == 'success' %}
+                                    <i class="bi bi-check-circle-fill text-success fs-4"></i>
+                                {% elif category == 'danger' %}
+                                    <i class="bi bi-exclamation-octagon-fill text-danger fs-4"></i>
+                                {% elif category == 'warning' %}
+                                    <i class="bi bi-exclamation-triangle-fill text-warning fs-4"></i>
+                                {% else %}
+                                    <i class="bi bi-info-circle-fill text-info fs-4"></i>
+                                {% endif %}
+                            </div>
+                            <div class="toast-content flex-grow-1">
+                                <div class="toast-message small fw-medium">{{ message }}</div>
+                            </div>
+                            <button type="button" class="btn-close ms-2" onclick="closeToast(this.closest('.toast-item'))" aria-label="Close"></button>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+
+    <!-- Contenido Principal -->
+    <main class="py-4" id="main-content-area">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer de Calidad Académica -->
+    <footer class="footer py-4 mt-auto border-top border-dark-subtle">
+        <div class="container text-center">
+            <p class="mb-1 text-muted small">&copy; 2026 - Universidad Técnica de Ambato (UTA) - Facultad de Ingeniería en Sistemas</p>
+            <p class="mb-0 text-muted-accent small">LogicWeb UTA: "Soluciones Reales" - Desarrollado bajo Arquitectura Limpia y Gamificación</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap 5 Bundle JS (Popper + Bootstrap) -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Custom JS -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+    
+    <!-- Mermaid.js para Diagramas de Flujo Premium -->
+    <script src="https://cdn.jsdelivr.net/npm/mermaid@10/dist/mermaid.min.js"></script>
+    <script>
+        mermaid.initialize({
+            startOnLoad: true,
+            theme: 'dark',
+            securityLevel: 'loose',
+            flowchart: {
+                useMaxWidth: true,
+                htmlLabels: true,
+                curve: 'basis'
+            }
+        });
+    </script>
+
+    <!-- Sistema de Animación y Autodesvanecimiento de Toasts -->
+    <script>
+        function closeToast(toastElement) {
+            if (!toastElement) return;
+            toastElement.classList.remove('show');
+            toastElement.classList.add('hide');
+            setTimeout(() => {
+                toastElement.remove();
+            }, 400);
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            const toasts = document.querySelectorAll("#toast-notification-container .toast-item");
+            toasts.forEach((toast) => {
+                // Activar animación de entrada
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 100);
+
+                // Auto ocultar tras 5 segundos
+                setTimeout(() => {
+                    closeToast(toast);
+                }, 5000);
+            });
+        });
+
+        function showToast(mensaje, tipo = "info") {
+            const container = document.getElementById("toast-notification-container");
+            if (!container) return;
+
+            const toast = document.createElement("div");
+            toast.className = "toast-item glass-toast border-0 shadow mb-3";
+            toast.setAttribute("role", "alert");
+
+            let iconClass = "bi-info-circle-fill text-info";
+            let indicatorBg = "bg-info";
+            if (tipo === "success") {
+                iconClass = "bi-check-circle-fill text-success";
+                indicatorBg = "bg-success";
+            } else if (tipo === "danger" || tipo === "error") {
+                iconClass = "bi-exclamation-octagon-fill text-danger";
+                indicatorBg = "bg-danger";
+                tipo = "danger";
+            } else if (tipo === "warning") {
+                iconClass = "bi-exclamation-triangle-fill text-warning";
+                indicatorBg = "bg-warning";
+            }
+
+            toast.innerHTML = `
+                <div class="toast-indicator ${indicatorBg}"></div>
+                <div class="d-flex align-items-center p-3">
+                    <div class="toast-icon me-3">
+                        <i class="bi ${iconClass} fs-4"></i>
+                    </div>
+                    <div class="toast-content flex-grow-1">
+                        <div class="toast-message small fw-medium">${mensaje}</div>
+                    </div>
+                    <button type="button" class="btn-close ms-2" onclick="closeToast(this.closest('.toast-item'))" aria-label="Close"></button>
+                </div>
+            `;
+
+            container.appendChild(toast);
+
+            requestAnimationFrame(() => {
+                setTimeout(() => {
+                    toast.classList.add('show');
+                }, 50);
+            });
+
+            setTimeout(() => {
+                closeToast(toast);
+            }, 5000);
+        }
+    </script>
+    {% block scripts %}{% endblock %}
+</body>
+</html>

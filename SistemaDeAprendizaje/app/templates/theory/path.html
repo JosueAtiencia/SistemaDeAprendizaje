@@ -1,0 +1,104 @@
+{% extends 'base.html' %}
+
+{% block title %}Mapa de Aprendizaje C++ – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Header Académico y Progreso -->
+    <div class="row mb-5 align-items-center">
+        <div class="col-lg-8">
+            <h1 class="text-white display-5 mb-2 fw-extrabold">Tu Ruta de Aprendizaje</h1>
+            <p class="text-secondary lead">Domina la lógica de programación en C++ de manera gamificada. Completa los ejercicios interactivos para desbloquear nuevos temas.</p>
+        </div>
+        <div class="col-lg-4 text-lg-end">
+            <div class="card card-glass text-start py-3 px-4 border-0">
+                <div class="d-flex justify-content-between align-items-center mb-2">
+                    <span class="text-secondary small fw-bold">PROGRESO GENERAL</span>
+                    <span class="text-accent fw-extrabold fs-5">{{ mapa.progreso_general }}%</span>
+                </div>
+                <div class="progress bg-dark border border-secondary border-opacity-35" style="height: 10px; border-radius: 5px;">
+                    <div class="progress-bar bg-accent" role="progressbar" style="width: {{ mapa.progreso_general }}%; box-shadow: 0 0 10px rgba(124,58,237,0.7);" aria-valuenow="{{ mapa.progreso_general }}" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+                <div class="mt-2 text-muted small d-flex justify-content-between">
+                    <span>{{ mapa.ejercicios_resueltos|length }} de 24 completados</span>
+                    <span>UTA - Lógica de Programación</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenedor del Árbol de Habilidades -->
+    <div class="learning-path-container">
+        <!-- Línea Vertical de Conexión -->
+        <div class="path-line"></div>
+
+        {% for unidad in mapa.unidades %}
+        <!-- Nodo de Unidad -->
+        <div class="unit-node text-center mb-5 animate-pulse">
+            <div class="unit-badge-header">
+                <i class="bi bi-mortarboard-fill me-1"></i> Unidad {{ unidad.id }}
+            </div>
+            <h3 class="text-white fw-bold mb-1">{{ unidad.titulo }}</h3>
+            <p class="text-secondary small mx-auto" style="max-width: 600px;">{{ unidad.descripcion }}</p>
+            
+            <a href="{{ url_for('theory.unit_details', unit_id=unidad.id) }}" class="btn btn-outline-light btn-sm rounded-pill px-4 mt-1 border-secondary text-secondary hover-white">
+                <i class="bi bi-book me-1"></i> Estudiar Teoría de Unidad {{ unidad.id }}
+            </a>
+
+            <!-- Conector de Ejercicios de la Unidad -->
+            <div class="exercises-connector">
+                {% for ej in unidad.ejercicios %}
+                    {% set es_completado = ej.id in ejercicios_completados %}
+                    
+                    {# Determinamos si el nodo está activo o bloqueado. #}
+                    {# Para simplificar la didáctica académica, permitimos acceder a todos, pero visualmente marcamos el activo y completado. #}
+                    {% set es_activo = not es_completado %}
+                    {% set class_node = "" %}
+                    {% if es_completado %}
+                        {% set class_node = "completed" %}
+                    {% elif es_activo %}
+                        {% set class_node = "active-node" %}
+                    {% endif %}
+
+                    <div class="d-flex flex-column align-items-center text-center">
+                        <a href="{{ url_for('interactive.view_interactive', ejercicio_id=ej.id) }}" class="exercise-circle-node {{ class_node }}" title="Resolver interactivo para {{ ej.titulo }}">
+                            <span class="node-number">{{ ej.id }}</span>
+                            <span class="node-status-icon">
+                                {% if es_completado %}
+                                    <i class="bi bi-patch-check-fill text-success"></i>
+                                {% elif es_activo %}
+                                    <i class="bi bi-play-circle-fill text-accent"></i>
+                                {% else %}
+                                    <i class="bi bi-lock-fill text-muted"></i>
+                                {% endif %}
+                            </span>
+                        </a>
+
+                        <span class="node-label">
+                            <span class="d-block text-white-50 small mb-0.5" style="letter-spacing: 0.1em;">RETO #{{ ej.id }}</span>
+                            <span class="d-block text-truncate mx-auto fw-bold" style="max-width: 160px; font-size: 0.9rem;">
+                                {{ ej.titulo.split(': ')[1] if ': ' in ej.titulo else ej.titulo }}
+                            </span>
+                        </span>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        {% endfor %}
+
+        <!-- Nodo Fin de la Ruta -->
+        <div class="text-center position-relative mt-5" style="z-index: 2; margin-bottom: 2rem;">
+            <div class="d-inline-flex flex-column align-items-center">
+                <!-- Círculo Meta con Icono de Copa/Trofeo -->
+                <div class="finish-node-circle mb-3 animate-pulse">
+                    <i class="bi bi-trophy-fill fs-2"></i>
+                </div>
+                <!-- Etiqueta de Meta -->
+                <div class="finish-node-label py-1.5 px-4 rounded-pill border shadow-sm">
+                    <span class="fw-bold small text-uppercase tracking-wider">¡Meta Alcanzada!</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

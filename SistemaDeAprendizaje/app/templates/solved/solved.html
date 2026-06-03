@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+
+{% block title %}Ejercicio Resuelto: {{ ejercicio.titulo }} – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Breadcrumbs de navegación -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{{ url_for('theory.learning_path') }}" class="text-accent text-decoration-none">Mapa de Ruta</a></li>
+            <li class="breadcrumb-item active text-secondary" aria-current="page">Guía Resuelta: Reto #{{ ejercicio.id }}</li>
+        </ol>
+    </nav>
+
+    <!-- Título Principal -->
+    <div class="row mb-5 mt-3 align-items-center">
+        <div class="col-md-9">
+            <div class="d-flex align-items-center">
+                <div class="p-3 bg-success bg-opacity-10 rounded-3 border border-success border-opacity-25 me-3">
+                    <i class="bi bi-file-earmark-check-fill text-success fs-2 animate-pulse"></i>
+                </div>
+                <div>
+                    <span class="text-secondary small fw-bold">CASO DE ESTUDIO RESUELTO</span>
+                    <h2 class="text-white mb-0 fw-bold">{{ ejercicio.titulo }}</h2>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3 text-md-end mt-3 mt-md-0">
+            <a href="{{ url_for('interactive.view_interactive', ejercicio_id=ejercicio.id) }}" class="btn btn-glass-secondary rounded-pill">
+                <i class="bi bi-arrow-left me-1"></i> Regresar al Reto
+            </a>
+        </div>
+    </div>
+
+    <!-- 1. Enunciado y Caso del Mundo Real -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card card-glass border-0 p-4 shadow">
+                <h4 class="text-white mb-3 fw-bold"><i class="bi bi-globe text-accent me-1"></i> 1. El Caso en la Vida Real</h4>
+                <p class="text-secondary small lead mb-4">{{ guia.caso_real }}</p>
+                
+                <h6 class="text-white fw-bold mb-2">Análisis de la Lógica del Negocio:</h6>
+                <ul class="list-unstyled mb-0 text-secondary small">
+                    {% for item in guia.analisis_logico %}
+                    <li class="mb-2 d-flex align-items-start">
+                        <i class="bi bi-shield-check text-accent me-2 fs-5 mt-0.5"></i>
+                        <span>{{ item }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Pseudocódigo y Diagrama de Flujo -->
+    <div class="row mb-5">
+        <!-- Pseudocódigo -->
+        <div class="col-md-6 mb-4">
+            <div class="card card-glass border-0 p-4 shadow h-100">
+                <h4 class="text-white mb-3 fw-bold"><i class="bi bi-code-square text-accent me-1"></i> 2. Pseudocódigo del Algoritmo</h4>
+                <p class="text-secondary small mb-3">La estructura de alto nivel e independiente del lenguaje para programar la lógica del negocio:</p>
+                
+                <pre class="code-block font-monospace p-3 text-light-emphasis border border-dark rounded mb-0 h-100"><code>{{ ejercicio.pseudocodigo }}</code></pre>
+            </div>
+        </div>
+
+        <!-- Diagrama de Flujo (Representación Visual con Mermaid) -->
+        <div class="col-md-6 mb-4">
+            <div class="card card-glass border-0 p-4 shadow h-100">
+                <h4 class="text-white mb-3 fw-bold"><i class="bi bi-diagram-3-fill text-accent me-1"></i> 3. Flujograma Lógico</h4>
+                <p class="text-secondary small mb-3">Representación visual secuencial de las condiciones y bucles:</p>
+                
+                <div class="d-flex flex-column align-items-center justify-content-center border border-secondary border-opacity-25 rounded-3 p-3 bg-dark bg-opacity-10 h-100">
+                    <div class="mermaid w-100">
+                    {{ guia.diagrama_mermaid | safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Solución C++ Estática con Explicaciones Interactivas -->
+    <div class="row">
+        <div class="col-lg-7 mb-4">
+            <div class="card card-glass border-0 p-4 shadow h-100">
+                <h4 class="text-white mb-2 fw-bold"><i class="bi bi-c-circle-fill text-accent me-1"></i> 4. Solución en C++ Nativo</h4>
+                <p class="text-secondary small mb-3">Haz clic sobre cualquier línea de código para ver su función académica e impacto lógico en C++:</p>
+                
+                <div class="interactive-code-chalkboard p-3 rounded border border-dark overflow-auto" style="max-height: 480px;">
+                    <ol class="list-unstyled font-monospace small mb-0 text-white-50">
+                        {% for line in lineas_codigo %}
+                        <li class="code-line-commented mb-1" data-explanation="{{ line.explanation }}">
+                            <code>{{ line.number }}: {{ line.html_content | safe }}</code>
+                        </li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+
+        <!-- Panel de Anotaciones Académicas (Lado Derecho) -->
+        <div class="col-lg-5 mb-4">
+            <div class="card card-glass border-0 p-4 shadow h-100">
+                <h4 class="text-white mb-3 fw-bold"><i class="bi bi-lightbulb-fill text-warning me-1"></i> Anotador Académico</h4>
+                
+                <div id="cpp-line-explanation" class="d-flex align-items-center justify-content-center h-100 border border-secondary border-opacity-15 rounded-3 p-4 min-height-150">
+                    <div class="text-center text-secondary small">
+                        <i class="bi bi-hand-index-thumb fs-2 text-accent mb-2 d-block"></i>
+                        Haz clic en cualquier línea del código C++ de la izquierda para ver su explicación técnica detallada aquí.
+                    </div>
+                </div>
+
+                <div class="text-center mt-4">
+                    <a href="{{ url_for('interactive.view_interactive', ejercicio_id=ejercicio.id) }}" class="btn btn-accent w-100 rounded-pill py-2.5">
+                        <i class="bi bi-play-circle-fill me-1"></i> ¡Probar Lógica en el Juez Online!
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

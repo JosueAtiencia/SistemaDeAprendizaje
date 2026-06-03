@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block title %}Registrar Estudiante – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-5">
+    <div class="row justify-content-center">
+        <div class="col-md-5">
+            <div class="card card-glass border-0 shadow-lg p-4 animate-pulse">
+                <div class="text-center mb-4">
+                    <i class="bi bi-person-plus-fill text-accent fs-1"></i>
+                    <h2 class="text-white mt-2 mb-1">Crear Cuenta</h2>
+                    <p class="text-secondary small">Regístrate para desbloquear los nodos interactivos y el Juez Online</p>
+                </div>
+                
+                <form action="{{ url_for('auth.register') }}" method="POST" id="form-register">
+                    <div class="mb-3">
+                        <label for="username" class="form-label text-light-emphasis small fw-semibold">Nombre de usuario:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-person-badge-fill"></i></span>
+                            <input type="text" class="form-control bg-transparent text-white border-secondary" id="username" name="username" placeholder="Ej. juan_perez" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="email" class="form-label text-light-emphasis small fw-semibold">Correo Institucional / Personal:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-envelope-at-fill"></i></span>
+                            <input type="email" class="form-control bg-transparent text-white border-secondary" id="email" name="email" placeholder="Ej. juan.perez@uta.edu.ec" required>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="password" class="form-label text-light-emphasis small fw-semibold">Contraseña:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-key-fill"></i></span>
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="password" name="password" placeholder="Mínimo 6 caracteres" required>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label for="confirm_password" class="form-label text-light-emphasis small fw-semibold">Confirmar Contraseña:</label>
+                        <div class="input-group">
+                            <span class="input-group-text bg-dark border-secondary text-secondary"><i class="bi bi-shield-check"></i></span>
+                            <input type="password" class="form-control bg-transparent text-white border-secondary" id="confirm_password" name="confirm_password" placeholder="Repite tu contraseña" required>
+                        </div>
+                    </div>
+                    
+                    <button type="submit" class="btn btn-accent w-100 py-2.5 rounded-pill mb-3" id="btn-register-submit">
+                        <i class="bi bi-person-check-fill me-1"></i> Registrarme y Comenzar
+                    </button>
+                </form>
+                
+                <div class="text-center mt-3 border-top border-secondary border-opacity-20 pt-3">
+                    <p class="text-secondary small mb-0">¿Ya tienes una cuenta? <a href="{{ url_for('auth.login') }}" class="text-accent fw-bold text-decoration-none">Inicia sesión aquí</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,213 @@
+{% extends 'base.html' %}
+
+{% block title %}Panel de Rendimiento y Gamificación – LogicWeb UTA{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <!-- Encabezado de Rendimiento -->
+    <div class="d-flex align-items-center mb-5 mt-3">
+        <div class="icon-frame-cozy me-3">
+            <i class="bi bi-speedometer2 text-accent fs-2"></i>
+        </div>
+        <div>
+            <span class="text-secondary small fw-bold">DASHBOARD DE RENDIMIENTO ESTUDIANTIL</span>
+            <h2 class="text-white mb-0 fw-bold">Panel de Control de Lógica C++</h2>
+        </div>
+    </div>
+
+    <!-- 1. Cuadro de Métricas Clave (Módulo 13.6) -->
+    <div class="row mb-5">
+        <div class="col-md-3 col-sm-6 mb-4 animate-pulse">
+            <div class="card card-glass border-0 stat-box h-100">
+                <span class="text-secondary small fw-bold d-block mb-1">TOTAL ENVIADOS</span>
+                <span class="stat-number text-white">{{ stats.total_intentos }}</span>
+                <span class="text-muted small d-block mt-2">Intentos de Compilación</span>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4 animate-pulse">
+            <div class="card card-glass border-0 stat-box h-100">
+                <span class="text-secondary small fw-bold d-block mb-1">ÉXITOS (APROBADOS)</span>
+                <span class="stat-number text-success">{{ stats.exitos_ac }}</span>
+                <span class="text-muted small d-block mt-2">Algoritmos Correctos</span>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4 animate-pulse">
+            <div class="card card-glass border-0 stat-box h-100">
+                <span class="text-secondary small fw-bold d-block mb-1">TASA DE ACIERTO</span>
+                <span class="stat-number text-warning">{{ stats.tasa_acierto }}%</span>
+                <span class="text-muted small d-block mt-2">Relación de Aceptados</span>
+            </div>
+        </div>
+
+        <div class="col-md-3 col-sm-6 mb-4 animate-pulse">
+            <div class="card card-glass border-0 stat-box h-100">
+                <span class="text-secondary small fw-bold d-block mb-1">COMPLETADO</span>
+                <span class="stat-number text-accent">{{ stats.progreso_porcentaje }}%</span>
+                <span class="text-muted small d-block mt-2">Nodos del Mapa</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- 2. Recompensas e Insignias Desbloqueadas (Gamificación) -->
+    <div class="row mb-5">
+        <div class="col-12">
+            <div class="card card-glass border-0 p-4 shadow">
+                <h4 class="text-white mb-4 fw-bold"><i class="bi bi-trophy-fill text-warning me-1"></i> Tus Logros e Insignias Desbloqueados</h4>
+                
+                {% if stats.insignias %}
+                <div class="row">
+                    {% for badge in stats.insignias %}
+                    <div class="col-lg-3 col-md-6 mb-4">
+                        <div class="badge-card card border-0 h-100">
+                            <div class="badge-icon">
+                                <i class="bi {{ badge.icono }} text-{{ badge.color }}"></i>
+                            </div>
+                            <h5 class="text-white fw-bold mb-1">{{ badge.titulo }}</h5>
+                            <p class="text-secondary small mb-0">{{ badge.descripcion }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% else %}
+                <div class="text-center py-4 bg-dark bg-opacity-25 rounded border border-secondary border-opacity-15">
+                    <i class="bi bi-award text-muted fs-2 d-block mb-2"></i>
+                    <p class="text-secondary small mb-1">Aún no tienes insignias desbloqueadas.</p>
+                    <p class="text-muted small mb-0">¡Resuelve tu primer ejercicio interactivo con veredicto <span class="badge bg-success">AC</span> para ganar tu primer logro!</p>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    <!-- 3. Historial de Intentos Global -->
+    <div class="row">
+        <div class="col-12">
+            <div class="card card-glass border-0 p-4 shadow">
+                <h4 class="text-white mb-4 fw-bold"><i class="bi bi-clock-history text-accent me-1"></i> Historial Completo de Evaluaciones C++</h4>
+                
+                <div class="table-responsive">
+                    <table class="table table-dark table-hover align-middle border-secondary border-opacity-15 mb-0 bg-transparent">
+                        <thead>
+                            <tr class="text-secondary small border-bottom border-secondary border-opacity-30">
+                                <th scope="col" class="py-3">Nombre del Ejercicio</th>
+                                <th scope="col" class="py-3 text-center">Intentos Realizados</th>
+                                <th scope="col" class="py-3">Desglose de Resultados</th>
+                                <th scope="col" class="py-3">Estado General</th>
+                                <th scope="col" class="py-3">Último Envío</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for item in grouped_history %}
+                            {# Fila principal clicable #}
+                            <tr data-bs-toggle="collapse" data-bs-target="#collapse-{{ item.ejercicio_id }}" aria-expanded="false" class="accordion-toggle cursor-pointer bg-transparent border-bottom border-secondary border-opacity-10 text-light-emphasis small">
+                                <td>
+                                    <div class="d-flex align-items-center">
+                                        <i class="bi bi-chevron-down text-muted me-2 collapse-chevron"></i>
+                                        <div>
+                                            <span class="fw-bold text-white small d-block">
+                                                {{ item.titulo }}
+                                            </span>
+                                            <span class="text-muted small">Unidad {{ item.unidad_id }}</span>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="text-center">
+                                    <span class="badge bg-secondary bg-opacity-25 text-white-50 px-2.5 py-1 rounded-pill fw-bold">
+                                        {{ item.total_intentos }} {% if item.total_intentos == 1 %}intento{% else %}intentos{% endif %}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="small d-flex flex-column gap-0.5">
+                                        {% if item.exitos > 0 %}
+                                            <span class="text-success fw-semibold"><i class="bi bi-check-circle-fill me-1"></i>{{ item.exitos }} exitoso(s)</span>
+                                        {% endif %}
+                                        {% if item.fracasos > 0 %}
+                                            <span class="text-warning fw-semibold"><i class="bi bi-exclamation-triangle-fill me-1"></i>{{ item.fracasos }} fallido(s)</span>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                                <td>
+                                    {% if item.resuelto %}
+                                        <span class="badge bg-success bg-opacity-15 text-success border border-success border-opacity-25 px-3 py-1.5 rounded-pill">
+                                            <i class="bi bi-patch-check-fill me-1 animate-pulse"></i> Aprobado (AC)
+                                        </span>
+                                    {% else %}
+                                        <span class="badge bg-danger bg-opacity-15 text-danger border border-danger border-opacity-25 px-3 py-1.5 rounded-pill">
+                                            <i class="bi bi-x-circle-fill me-1"></i> No Aprobado
+                                        </span>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    <span class="text-muted small">
+                                        {{ item.ultimo_intento.strftime('%d/%m/%Y %H:%M') }}
+                                    </span>
+                                </td>
+                            </tr>
+                            {# Fila colapsable con el detalle #}
+                            <tr class="border-0 no-hover">
+                                <td colspan="5" class="p-0 border-0">
+                                    <div class="collapse" id="collapse-{{ item.ejercicio_id }}">
+                                        <div class="p-3 my-2 rounded border border-secondary border-opacity-15 bg-black bg-opacity-35 mx-3">
+                                            <h6 class="text-white fw-bold mb-3"><i class="bi bi-terminal-fill text-accent me-1"></i> Historial Detallado de Envíos</h6>
+                                            <div class="table-responsive">
+                                                <table class="table table-sm table-dark table-borderless align-middle mb-0 bg-transparent">
+                                                    <thead>
+                                                        <tr class="text-muted small border-bottom border-secondary border-opacity-15">
+                                                            <th scope="col" class="py-2">ID Envío</th>
+                                                            <th scope="col" class="py-2">Fecha y Hora</th>
+                                                            <th scope="col" class="py-2">Entradas Enviadas</th>
+                                                            <th scope="col" class="py-2">Salida stdout C++</th>
+                                                            <th scope="col" class="py-2">Veredicto Juez</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {% for sub_intento in item.intentos_detalle %}
+                                                        <tr class="text-light-emphasis small border-bottom border-secondary border-opacity-5">
+                                                            <td><span class="text-muted">#{{ sub_intento.id }}</span></td>
+                                                            <td><span class="text-muted">{{ sub_intento.fecha_intento.strftime('%d/%m/%Y %H:%M') }}</span></td>
+                                                            <td>
+                                                                <code class="text-light-accent">
+                                                                    {% for k, v in sub_intento.datos_ingresados.items() %}
+                                                                        <strong>{{ k }}:</strong> {{ v }}{% if not loop.last %}, {% endif %}
+                                                                    {% endfor %}
+                                                                </code>
+                                                            </td>
+                                                            <td>
+                                                                <pre class="bg-dark text-light p-1.5 rounded font-monospace small mb-0 d-inline-block px-2 border border-secondary border-opacity-15" style="max-width: 350px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 0.8rem; margin: 0;"><code>{{ sub_intento.resultado_obtenido.split('\n')[0] }}</code></pre>
+                                                            </td>
+                                                            <td>
+                                                                {% if sub_intento.estado_oj == 'AC' %}
+                                                                    <span class="badge badge-oj badge-oj-ac" style="font-size: 0.75rem;">Éxito</span>
+                                                                {% elif sub_intento.estado_oj == 'WA' %}
+                                                                    <span class="badge badge-oj badge-oj-wa" style="font-size: 0.75rem;">Fallecido</span>
+                                                                {% else %}
+                                                                    <span class="badge badge-oj badge-oj-re" style="font-size: 0.75rem;">Fallecido ({{ sub_intento.estado_oj }})</span>
+                                                                {% endif %}
+                                                            </td>
+                                                        </tr>
+                                                        {% endfor %}
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center py-5 text-secondary small">
+                                    <i class="bi bi-calendar2-x fs-2 d-block mb-2"></i>
+                                    No se registran envíos en tu historial académico.
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
